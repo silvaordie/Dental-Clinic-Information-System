@@ -36,7 +36,7 @@ create table employee
 create table phone_number_employee
    (phone char(10),
    VAT char(10),
-   primary key(phone),
+   primary key(VAT,phone),
    foreign key(VAT))
     references(employee));
 
@@ -75,7 +75,7 @@ create table client
 create table phone_number_client
    (phone char(10),
    VAT char(10),
-   primary key(phone),
+   primary key(VAT,phone),
    foreign key(VAT))
     references(client));
 
@@ -88,51 +88,170 @@ create table permanent_doctor
 create table trainee_doctor
    (VAT char(10),
    years int,
-   primary key(VAT)
    foreign key(VAT)
-    references employee);
+    references(doctor)
+   foreign key(supervisor)
+    references (permanent_doctor)
+   primary key (VAT));
 
 create table supervision_report
-   ();
+   (VAT char(10),
+   date_timestamp DATE,
+   description varchar(255),
+   evaluation int,
+   primary key(date_timestamp)
+   foreign key(VAT)
+    references (trainee_doctor)
+   primary key (VAT, date_timestamp)
+   );
 
 create table appointment
-   ();
+   (VAT_doctor char(10),
+   date_timestamp DATE,
+   description varchar(255),
+   VAT_client char(10),
+   primary key(date_timestamp),
+   foreign key(VAT_doctor)
+    references (doctor),
+   foreign key(VAT_client)
+    references (client)
+   primary key (VAT_doctor, date_timestamp));
 
 create table consultation
-   ();
+   (VAT_doctor char(10),
+   date_timestamp DATE,
+   SOAP_S varchar(255),
+   SOAP_O varchar(255),
+   SOAP_A varchar(255),
+   SOAP_P varchar(255),
+   foreign key(VAT_doctor)
+    references (appointment),
+   foreign key(date_timestamp)
+    references (appointment),
+   primary key (VAT_doctor, date_timestamp)
+   );
 
 create table consultation_assitant
-   ();
+   (VAT_doctor char(10),
+   date_timestamp DATE,
+   VAT_nurse char(10),
+   foreign key (VAT_doctor)
+    references (appointment),
+   foreign key (date_timestamp)
+    references (appointment),
+   foreign key (VAT-nurse)
+    references (nurse)
+   primary key (VAT_doctor, date_timestamp));
 
 create table diagnostic_code
-   ();
+   (ID varchar(255),
+   description varchar(255),
+   primary key(ID),
+   );
 
 create table diagnostic_code_relation
-   ();
+   (ID1 varchar(255),
+   ID2 varchar(255),
+   type varchar(255),
+   foreign key(ID1)
+    references (diagnostic_code),
+   foreign key(ID2)
+    references (diagnostic_code)
+   primary key (ID1, ID2));
 
 create table consultation_diagnostic
-   ();
+   (VAT_doctor char(10),
+   date_timestamp DATE,
+   ID varchar(255),
+   foreign key (VAT_doctor)
+    references (consultation)
+   foreign key (date_timestamp)
+    references (consultation)
+   foreign key (ID)
+    references (diagnostic_code)
+   primary key (VAT_doctor, date_timestamp, ID));
 
 create table medication
-   ();
+   (name varchar(255),
+   lab varchar(255),
+   primary key(name, lab));
 
 create table prescription
-   ();
+   (name varchar(255),
+   lab varchar(255),
+   VAT_doctor char(10),
+   date_timestamp DATE,
+   ID varchar(255),
+   dosage varchar(255),
+   description varchar(255),
+   foreign key (VAT_doctor),
+    references (consultation_diagnostic),
+   foreign key (date_timestamp)
+    references (consultation_diagnostic),
+   foreign key (ID)
+    references consultation_diagnostic),
+   foreign key (name)
+    references (medication),
+   foreign key (lab)
+    references (medication)
+   primary key (name, VAT_doctor, date_timestamp, ID));
 
 create table procedure
-   ();
+   (name varchar(255),
+   type varchar (255)
+   primary key (name));
 
 create table procedure_in_cosultation
-   ();
+   (name varchar(255),
+   VAT_doctor char(10),
+   date_timestamp DATE,
+   description varchar(255),
+   foreign key (VAT_doctor),
+    references (consultation),
+   foreign key (date_timestamp)
+    references (consultation),
+   foreign key (name)
+    references procedure),
+   primary key (name, VAT_doctor, date_timestamp)
+   );
 
 create table procedure_radiology
-   ();
+   (name varchar(255),
+   file varchar(255),
+   VAT_doctor char(10),
+   date_timestamp DATE,
+   primary key (file, name, VAT_doctor, date_timestamp)
+   foreign key (VAT_doctor),
+    references (consultation_diagnostic),
+   foreign key (date_timestamp)
+    references (consultation_diagnostic),
+   foreign key (name)
+    references procedure),);
 
 create table teeth
-   ();
+   (quadrant char(2),
+   number char(3),
+   name varchar(255),
+   primary key(quadrant, number));
 
 create table procedure_charting
-   ();
+   (name varchar(255),
+   VAT char(10),
+   date_timestamp DATE,
+   quadrant char(2),
+   number char(3),
+   foreign key(name),
+      references (procedure_in_cosultation),
+   foreign key(VAT),
+      references (procedure_in_cosultation),
+   foreign key(date_timestamp)
+      references(procedure_in_cosultation),
+   foreign key (quadrant)
+      references(teeth)
+   foreign key (number)
+      references
+   primary key (name, VAT, date_timestamp, quadrant, number)
+   );
 
 
 
