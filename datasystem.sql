@@ -1,3 +1,8 @@
+--Perguntar o always assigned to
+--Candidate keys
+--"Are either receptionists, nurses or doctors"
+--on delete cascade
+-- numeric
 drop table if exists employee;
 drop table if exists phone_number_employee;
 drop table if exists receptionist;
@@ -44,7 +49,7 @@ create table receptionist
    (VAT char(10),
    primary key(VAT)
    foreign key(VAT)
-    references employee);
+    references (employee));
 
 create table doctor
    (VAT char(10),
@@ -53,13 +58,13 @@ create table doctor
    e-mail varchar(255) unique,
    primary key(VAT)
    foreign key(VAT)
-    references employee);
+    references (employee));
 
 create table nurse
    (VAT char(10),
    primary key(VAT)
    foreign key(VAT)
-    references employee);
+    references (employee));
 
 create table client
    (VAT char(10),
@@ -83,7 +88,7 @@ create table permanent_doctor
    (VAT char(10),
    primary key(VAT)
    foreign key(VAT)
-    references doctor);
+    references (doctor));
 
 create table trainee_doctor
    (VAT char(10),
@@ -98,7 +103,7 @@ create table supervision_report
    (VAT char(10),
    date_timestamp DATE,
    description varchar(255),
-   evaluation int,
+   evaluation int constraint CHECK(evaluation <=5) AND (evaluation >= 5),
    primary key(date_timestamp)
    foreign key(VAT)
     references (trainee_doctor)
