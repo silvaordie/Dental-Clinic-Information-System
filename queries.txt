@@ -1,0 +1,49 @@
+1-
+
+select client.VAT, client.name, phone_number_client.phone 
+from client, phone_number_client, consultation, employee, appointment
+where employee.name = "Jane Sweettoth" and employee.VAT = appointment.VAT_doctor and appointment.VAT = consultation.VAT 
+	and appointment.VAT_client = client.VAT and phone_number_client.VAT = client.VAT
+order by client.name
+	
+	
+	nesta acho que tenho que fazer um join entre client e phone_number_client
+	nao tenho a certeza se tenho que fazer appointment.VAT = consultation.VAT para garantir que estou a
+falar de uma coonsultation e nao apenas de um appointment
+
+
+2-
+
+(select employee.name
+from employee, supervision_report
+where employee.VAT = supervision_report.VAT and supervision_report.evaluation < 3)
+union
+(select employee.name
+from employee, supervision_report
+where employee.VAT = supervision_report.VAT and supervision_report.description like '%insufficient%' )
+
+3- 
+
+select client.name, client.city, client.VAT
+from client, appointment, consultation
+where appointment.VAT_client = client.VAT and consultation.date_timestamp=appointment.date_timestamp 
+	and consultation.date_timestamp >= all (
+		select consultation.date_timestamp 
+		from consultation, appointment
+		where appointment.VAT_doctor = consultation.VAT_doctor and client.VAT = appointment.VAT_client and
+		and (consultation.SOAP_O like '%gingivilis%' or consultation.SOAP_O like '%periodontilis%') )
+		
+		
+nestes que tem duas keys eu tenho aulgumas duvidas se isto funciona assim tao bem....
+
+
+4-
+
+select client.name , client.VAT, client.street, client.city, client.zip
+from client, appointment
+where client.VAT = appointment.VAT_client and appointment.date_timestamp not in
+	(select consultation.date_timestamp from consultation)
+	
+nestes que tem duas keys eu tenho aulgumas duvidas se isto funciona assim tao bem....
+
+	
