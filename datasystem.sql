@@ -42,7 +42,7 @@ create table phone_number_employee
    (phone char(10),
    VAT char(10),
    primary key(VAT,phone),
-   foreign key(VAT))
+   foreign key(VAT)
     references(employee));
 
 create table receptionist
@@ -56,7 +56,7 @@ create table doctor
    specialization varchar(255),
    biography varchar(255),
    e-mail varchar(255) unique,
-   primary key(VAT)
+   primary key(VAT),
    foreign key(VAT)
     references (employee));
 
@@ -81,12 +81,12 @@ create table phone_number_client
    (phone char(10),
    VAT char(10),
    primary key(VAT,phone),
-   foreign key(VAT))
+   foreign key(VAT)
     references(client));
 
 create table permanent_doctor
    (VAT char(10),
-   primary key(VAT)
+   primary key(VAT),
    foreign key(VAT)
     references (doctor));
 
@@ -94,9 +94,9 @@ create table trainee_doctor
    (VAT char(10),
    years int,
    foreign key(VAT)
-    references(doctor)
+    references(doctor),
    foreign key(supervisor)
-    references (permanent_doctor)
+    references (permanent_doctor),
    primary key (VAT));
 
 create table supervision_report
@@ -104,9 +104,8 @@ create table supervision_report
    date_timestamp DATE,
    description varchar(255),
    evaluation int constraint CHECK(evaluation <=5) AND (evaluation >= 5),
-   primary key(date_timestamp)
    foreign key(VAT)
-    references (trainee_doctor)
+    references (trainee_doctor),
    primary key (VAT, date_timestamp)
    );
 
@@ -119,7 +118,7 @@ create table appointment
    foreign key(VAT_doctor)
     references (doctor),
    foreign key(VAT_client)
-    references (client)
+    references (client),
    primary key (VAT_doctor, date_timestamp));
 
 create table consultation
@@ -145,7 +144,7 @@ create table consultation_assitant
    foreign key (date_timestamp)
     references (appointment),
    foreign key (VAT-nurse)
-    references (nurse)
+    references (nurse),
    primary key (VAT_doctor, date_timestamp));
 
 create table diagnostic_code
@@ -161,7 +160,7 @@ create table diagnostic_code_relation
    foreign key(ID1)
     references (diagnostic_code),
    foreign key(ID2)
-    references (diagnostic_code)
+    references (diagnostic_code),
    primary key (ID1, ID2));
 
 create table consultation_diagnostic
@@ -169,11 +168,11 @@ create table consultation_diagnostic
    date_timestamp DATE,
    ID varchar(255),
    foreign key (VAT_doctor)
-    references (consultation)
+    references (consultation),
    foreign key (date_timestamp)
-    references (consultation)
+    references (consultation),
    foreign key (ID)
-    references (diagnostic_code)
+    references (diagnostic_code),
    primary key (VAT_doctor, date_timestamp, ID));
 
 create table medication
@@ -198,7 +197,7 @@ create table prescription
    foreign key (name)
     references (medication),
    foreign key (lab)
-    references (medication)
+    references (medication),
    primary key (name, VAT_doctor, date_timestamp, ID));
 
 create table procedure
@@ -231,7 +230,7 @@ create table procedure_radiology
    foreign key (date_timestamp)
     references (consultation_diagnostic),
    foreign key (name)
-    references procedure),);
+    references (procedure));
 
 create table teeth
    (quadrant char(2),
@@ -252,9 +251,9 @@ create table procedure_charting
    foreign key(date_timestamp)
       references(procedure_in_cosultation),
    foreign key (quadrant)
-      references(teeth)
+      references(teeth),
    foreign key (number)
-      references
+      references (teeth),
    primary key (name, VAT, date_timestamp, quadrant, number)
    );
 
