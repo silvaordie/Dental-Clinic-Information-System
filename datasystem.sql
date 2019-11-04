@@ -1,12 +1,3 @@
---Perguntar o always assigned to
---Candidate keys
---"Are either receptionists, nurses or doctors"
---on delete cascade
--- numeric
--- como usar "procedure", "name", "file"
--- Derived from DATE
--- /0
-
 drop table if exists employee;
 drop table if exists phone_number_employee;
 drop table if exists receptionist;
@@ -39,8 +30,8 @@ create table employee
    street varchar(255),
    city varchar(255),
    zip char(9),
-   IBAN char(26) unique,
-   salary float CHECK (slary > 0),
+   IBAN char(26) unique not null,
+   salary numeric(20,2) CHECK (salary > 0),
    primary key (VAT));
 
 create table phone_number_employee
@@ -79,7 +70,7 @@ create table client
    city varchar(255),
    zip char(9),
    gender char(2),
-   salary float,
+   age int, --age = (current_date - birthdate).years
    primary key (VAT));
 
 create table phone_number_client
@@ -93,15 +84,16 @@ create table permanent_doctor
    (VAT char(10),
    primary key(VAT),
    foreign key(VAT)
-    references (doctor(VAT)));
+    references (doctor(VAT)) on delete cascade);
 
 create table trainee_doctor
    (VAT char(10),
    years int,
+   supervisor char(10),
    foreign key(VAT)
     references(doctor(VAT)),
    foreign key(supervisor)
-    references (permanent_doctor(supervisor)),
+    references (permanent_doctor(supervisor)) on delete cascade,
    primary key (VAT));
 
 create table supervision_report
@@ -149,7 +141,7 @@ create table consultation_assitant
    foreign key (date_timestamp)
     references (appointment(date_timestamp)),
    foreign key (VAT_nurse)
-    references (nurse(VAT)),
+    references (nurse(VAT)) on delete cascade,
    primary key (VAT_doctor, date_timestamp));
 
 create table diagnostic_code
@@ -262,6 +254,60 @@ create table procedure_charting
    primary key (name, VAT, date_timestamp, quadrant, number)
    );
 
+--		employees
+insert into employee values ('123456789', 'Jane Sweettooth', TO_DATE('17/12/1990', 'DD/MM/YYYY'), 'rua', 'cidade', '2780-255', 'PT50567891234567891234567', 900);
+insert into employee values ('987654321', 'Julia Sweettooth', TO_DATE('17/12/1990', 'DD/MM/YYYY'), 'rua2', 'cidade2', '2780-260', 'PT50567891231234891234567', 600);
+insert into employee values ('123746789', 'Jane Dentedoce', TO_DATE('17/12/1980', 'DD/MM/YYYY'), 'rua2', 'cidade3', '2770-255', 'PT50567896734567891234567', 1000);
+insert into employee values ('987656789', 'Julio Isidro', TO_DATE('17/12/1200', 'DD/MM/YYYY'), 'rua', 'cidade2', '2780-485', 'PT50123491234567891234666', 666.80);
+insert into employee values ('123458889', 'João Baião', TO_DATE('17/12/1805', 'DD/MM/YYYY'), 'rua7', 'cidade3', '2780-777', 'PT50567891234567895432167', 9600);
 
+--		doctors
+insert into doctor values ('123456789', 'Expert em caries', 'Boa aluna, mas pessima a tirar sisos','Jane@bluetooth.com');
+insert into doctor values ('987654321', 'Expert em sisos', '3 meses na clinica e ja se fartou','Julia@bluetooth.com');
+insert into doctor values ('987656789', 'Expert em piropos', 'Trabalha pouco fala muito','Julio@bluetooth.com');
 
+--    nurses
+insert into nurse values ('123746789');
 
+--		permanent_doctors 
+insert into permanent_doctors values ('123456789');
+
+--		trainee_doctors 
+insert into trainee_doctors values ('987654321', 0, '123456789');
+insert into trainee_doctors values ('987656789', 1, '123456789');
+
+--		supervision_reports 
+insert into supervision_reports values ('987654321', TO_DATE('17/12/2018', 'DD/MM/YYYY'), 'Boa moça a Julia', 4);
+insert into supervision_reports values ('987656789', TO_DATE('17/12/2018', 'DD/MM/YYYY'), 'Mais piropos', 1);
+insert into supervision_reports values ('987656789', TO_DATE('17/12/2017', 'DD/MM/YYYY'), 'insufficient', 3);
+
+--		clients 
+insert into clients values ('999999999', 'José Bebé', TO_DATE('17/12/1990', 'DD/MM/YYYY'), 'rua3', 'cidade1', '2780-255', 'M' , 26);
+insert into clients values ('888888888', 'Hugo Burro', TO_DATE('17/12/1890', 'DD/MM/YYYY'), 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into clients values ('777777777', 'Pedro Cebo', TO_DATE('17/12/1890', 'DD/MM/YYYY'), 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into clients values ('666666666', 'Filipe Bibe', TO_DATE('17/12/1890', 'DD/MM/YYYY'), 'rua1', 'cidade5', '2780-255', 'M' , 26);
+
+--    appointments
+insert into consultation values ('123456789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 'rotina', '999999999');
+insert into consultation values ('123456789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), 'follow-up', '999999999');
+insert into consultation values ('987654321', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 'rotina'), '888888888';
+insert into consultation values ('987654321', TO_DATE('17/12/2019', 'DD/MM/YYYY'), 'follow-up', '888888888');
+insert into consultation values ('987656789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 'rotina', '777777777');
+insert into consultation values ('987656789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), 'follow-up', '777777777');
+insert into consultation values ('987656789', TO_DATE('17/11/2017', 'DD/MM/YYYY'), 'rotina', '666666666');
+insert into consultation values ('987656789', TO_DATE('17/12/2017', 'DD/MM/YYYY'), 'follow-up', '666666666');
+--    consultations
+insert into consultation values ('123456789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 's', 'gingivitis', 'a', 'p' );
+insert into consultation values ('123456789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), 's', 'periodontitis', 'a', 'p' );
+insert into consultation values ('987654321', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 's', 'gingivitis', 'a', 'p' );
+insert into consultation values ('987654321', TO_DATE('17/12/2019', 'DD/MM/YYYY'), 's', 'periodontitis', 'a', 'p' );
+insert into consultation values ('987656789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 's', 'o', 'a', 'p' );
+insert into consultation values ('987656789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), 's', 'o', 'a', 'p' );
+
+--    consultation_assistants
+insert into consultation_assistants values ('123456789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), '123746789' );
+insert into consultation_assistants values ('123456789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), '123746789' );
+insert into consultation_assistants values ('987654321', TO_DATE('17/11/2019', 'DD/MM/YYYY'), '123746789' );
+insert into consultation_assistants values ('987654321', TO_DATE('17/12/2019', 'DD/MM/YYYY'), '123746789' );
+insert into consultation_assistants values ('987656789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), '123746789' );
+insert into consultation_assistants values ('987656789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), '123746789' );
