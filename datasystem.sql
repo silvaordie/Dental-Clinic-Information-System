@@ -47,7 +47,7 @@ create table phone_number_employee
    VAT char(10),
    primary key(VAT, phone),
    foreign key(VAT)
-    references(employee(VAT)));
+    references employee);
 
 create table receptionist
    (VAT char(10),
