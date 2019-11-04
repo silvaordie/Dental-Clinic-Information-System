@@ -51,7 +51,7 @@ create table phone_number_employee
 
 create table receptionist
    (VAT char(10),
-   primary key(VAT)
+   primary key(VAT),
    foreign key(VAT)
     references employee(VAT));
 
@@ -66,7 +66,7 @@ create table doctor
 
 create table nurse
    (VAT char(10),
-   primary key(VAT)
+   primary key(VAT),
    foreign key(VAT)
     references employee(VAT));
 
@@ -96,7 +96,7 @@ create table permanent_doctor
 
 create table trainee_doctor
    (VAT char(10),
-   years int,
+   supervisor char(10),
    foreign key(VAT)
     references doctor(VAT),
    foreign key(supervisor)
@@ -107,7 +107,7 @@ create table supervision_report
    (VAT char(10),
    date_timestamp DATE,
    description varchar(255),
-   evaluation int constraint CHECK(evaluation <=5) AND (evaluation >= 5),
+   evaluation int constraint CHECK (evaluation <=5 AND evaluation >= 5),
    foreign key(VAT)
     references trainee_doctor(VAT),
    primary key (VAT, date_timestamp)
@@ -118,7 +118,6 @@ create table appointment
    date_timestamp DATE,
    description varchar(255),
    VAT_client char(10),
-   primary key(date_timestamp),
    foreign key(VAT_doctor)
     references doctor(VAT),
    foreign key(VAT_client)
@@ -154,7 +153,7 @@ create table consultation_assitant
 create table diagnostic_code
    (ID varchar(255),
    description varchar(255),
-   primary key(ID),
+   primary key(ID)
    );
 
 create table diagnostic_code_relation
@@ -192,10 +191,10 @@ create table prescription
    ID varchar(255),
    dosage varchar(255),
    description varchar(255),
-   foreign key (VAT_doctor),
+   foreign key (VAT_doctor)
     references consultation_diagnostic(VAT_doctor),
    foreign key (date_timestamp)
-    references consultation_diagnostic(VAT_doctor),
+    references consultation_diagnostic(date_timestamp),
    foreign key (ID)
     references consultation_diagnostic(ID),
    foreign key (name)
@@ -214,7 +213,7 @@ create table procedure_in_cosultation
    VAT_doctor char(10),
    date_timestamp DATE,
    description varchar(255),
-   foreign key (VAT_doctor),
+   foreign key (VAT_doctor)
     references consultation(VAT_doctor),
    foreign key (date_timestamp)
     references consultation(date_timestamp),
@@ -228,8 +227,8 @@ create table procedure_radiology
    file varchar(255),
    VAT_doctor char(10),
    date_timestamp DATE,
-   primary key (file, name, VAT_doctor, date_timestamp)
-   foreign key (VAT_doctor),
+   primary key (file, name, VAT_doctor, date_timestamp),
+   foreign key (VAT_doctor)
     references consultation_diagnostic(VAT_doctor),
    foreign key (date_timestamp)
     references consultation_diagnostic(date_timestamp),
