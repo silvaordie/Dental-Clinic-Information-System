@@ -8,7 +8,7 @@ drop table if exists medication;
 drop table if exists consultation_diagnostic;
 drop table if exists diagnostic_code_relation;
 drop table if exists diagnostic_code;
-drop table if exists consultation_assitant;
+drop table if exists consultation_assistant;
 drop table if exists consultation;
 drop table if exists appointment;
 drop table if exists supervision_report;
@@ -127,7 +127,7 @@ create table consultation
    primary key (VAT_doctor, date_timestamp)
    );
 
-create table consultation_assitant
+create table consultation_assistant
    (VAT_doctor char(10),
    date_timestamp DATE,
    VAT_nurse char(10),
