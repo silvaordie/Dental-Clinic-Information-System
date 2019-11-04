@@ -31,6 +31,7 @@ drop table if exists procedure_radiology;
 drop table if exists teeth;
 drop table if exists procedure_charting;
 
+
 create table employee
    (VAT char(10),
    name varchar(255),
@@ -53,7 +54,7 @@ create table receptionist
    (VAT char(10),
    primary key(VAT)
    foreign key(VAT)
-    references (employee(VAT)));
+    references (employee(VAT)) on delete cascade);
 
 create table doctor
    (VAT char(10),
@@ -62,13 +63,13 @@ create table doctor
    e-mail varchar(255) unique,
    primary key(VAT),
    foreign key(VAT)
-    references (employee(VAT)));
+    references (employee(VAT)) on delete cascade);
 
 create table nurse
    (VAT char(10),
    primary key(VAT)
    foreign key(VAT)
-    references (employee(VAT)));
+    references (employee(VAT)) on delete cascade);
 
 create table client
    (VAT char(10),
@@ -120,7 +121,7 @@ create table appointment
    VAT_client char(10),
    primary key(date_timestamp),
    foreign key(VAT_doctor)
-    references (doctor(VAT)),
+    references (doctor(VAT)) on delete cascade,
    foreign key(VAT_client)
     references (client(VAT)),
    primary key (VAT_doctor, date_timestamp));
