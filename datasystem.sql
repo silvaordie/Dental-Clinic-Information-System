@@ -3,6 +3,10 @@
 --"Are either receptionists, nurses or doctors"
 --on delete cascade
 -- numeric
+-- como usar "procedure", "name", "file"
+-- Derived from DATE
+-- /0
+
 drop table if exists employee;
 drop table if exists phone_number_employee;
 drop table if exists receptionist;
@@ -21,7 +25,7 @@ drop table if exists diagnostic_code_relation;
 drop table if exists consultation_diagnostic;
 drop table if exists medication;
 drop table if exists prescription;
-drop table if exists procedure;
+drop table if exists _procedure;
 drop table if exists procedure_in_cosultation;
 drop table if exists procedure_radiology;
 drop table if exists teeth;
@@ -35,7 +39,7 @@ create table employee
    city varchar(255),
    zip char(9),
    IBAN char(26) unique,
-   salary float,
+   salary float CHECK (slary > 0),
    primary key (VAT));
 
 create table phone_number_employee
@@ -200,7 +204,7 @@ create table prescription
     references (medication),
    primary key (name, VAT_doctor, date_timestamp, ID));
 
-create table procedure
+create table _procedure
    (name varchar(255),
    type varchar (255)
    primary key (name));
