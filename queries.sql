@@ -87,5 +87,54 @@ where consultation_assistant.date_timestamp between timestamp('2019-01-01') and 
 
 	
 
+7- 
+
+select ID, name, lab
+from prescription
+group by ID
+
+having count(name) >= all (
+	select count(name )
+	from prescription
+	 group by ID )
+
+	 
+8- 
+
+select prescription.name , prescription.lab
+from prescription, diagnostic_code
+where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
+	and diagnostic_code.description like "%dental cavities%"
+group by (prescription.name, prescription.lab)
+order by prescription.name
+	
+except
+
+select prescription.name , prescription.lab
+from prescription, diagnostic_code
+where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
+	and diagnostic_code.description like "%infectious deseases%" 
+
+
+9-
+
+select client.name , client.street, client.city, client.zip
+from client, appointment
+where client.VAT = appointment.VAT_client and extract(year from appointment.date_timestamp) = '2019'
+
+except
+
+select client.name , client.street, client.city, client.zip
+from client, appointment
+where client.VAT = appointment.VAT_client and not exists (
+	select 1 from appointment, consultation where appointment.VAT_doctor  =consultation.VAT_doctor 
+	and appointment.date_timestamp=consultation.date_timestamp)
+)
+
+
+
+
+
+
 
 
