@@ -7,7 +7,6 @@
 -- Derived from DATE
 -- /0
 
-drop table if exists employee;
 drop table if exists phone_number_employee;
 drop table if exists receptionist;
 drop table if exists doctor;
@@ -30,6 +29,7 @@ drop table if exists procedure_in_cosultation;
 drop table if exists procedure_radiology;
 drop table if exists teeth;
 drop table if exists procedure_charting;
+drop table if exists employee;
 
 create table employee
    (VAT char(10),
