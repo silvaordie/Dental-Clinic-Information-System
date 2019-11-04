@@ -233,10 +233,8 @@ create table procedure_charting
    number char(3),
    foreign key(name, VAT, date_timestamp)
       references procedure_in_cosultation(name, VAT_doctor, date_timestamp),
-   foreign key (quadrant)
-      references teeth(quadrant),
-   foreign key (number)
-      references teeth(number),
+   foreign key (quadrant, number)
+      references teeth(quadrant, number),
    primary key (name, VAT, date_timestamp, quadrant, number)
    );
 
