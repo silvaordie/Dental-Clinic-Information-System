@@ -131,10 +131,8 @@ create table consultation
    SOAP_O varchar(255),
    SOAP_A varchar(255),
    SOAP_P varchar(255),
-   foreign key(VAT_doctor)
-    references appointment(VAT_doctor),
-   foreign key(date_timestamp)
-    references appointment(date_timestamp),
+   foreign key(VAT_doctor,date_timestamp)
+    references appointment(VAT_doctor, date_timestamp),
    primary key (VAT_doctor, date_timestamp)
    );
 
