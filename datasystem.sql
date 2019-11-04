@@ -1,7 +1,7 @@
 drop table if exists procedure_charting;
 drop table if exists teeth;
 drop table if exists procedure_radiology;
-drop table if exists procedure_in_cosultation;
+drop table if exists procedure_in_consultation;
 drop table if exists _procedure;
 drop table if exists prescription;
 drop table if exists medication;
@@ -187,7 +187,7 @@ create table _procedure
    type varchar (255),
    primary key (name));
 
-create table procedure_in_cosultation
+create table procedure_in_consultation
    (name varchar(255),
    VAT_doctor char(10),
    date_timestamp DATE,
@@ -223,7 +223,7 @@ create table procedure_charting
    quadrant char(2),
    number char(3),
    foreign key(name, VAT, date_timestamp)
-      references procedure_in_cosultation(name, VAT_doctor, date_timestamp),
+      references procedure_in_consultation(name, VAT_doctor, date_timestamp),
    foreign key (quadrant, number)
       references teeth(quadrant, number),
    primary key (name, VAT, date_timestamp, quadrant, number)
