@@ -100,7 +100,7 @@ create table trainee_doctor
    foreign key(VAT)
     references doctor(VAT),
    foreign key(supervisor)
-    references permanent_doctor(supervisor),
+    references permanent_doctor(VAT),
    primary key (VAT));
 
 create table supervision_report
