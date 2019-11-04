@@ -59,7 +59,7 @@ create table doctor
    (VAT char(10),
    specialization varchar(255),
    biography varchar(255),
-   e-mail varchar(255) unique,
+   email varchar(255) unique,
    primary key(VAT),
    foreign key(VAT)
     references employee(VAT));
@@ -107,7 +107,7 @@ create table supervision_report
    (VAT char(10),
    date_timestamp DATE,
    description varchar(255),
-   evaluation int constraint CHECK (evaluation <=5 AND evaluation >= 5),
+   evaluation int CHECK (evaluation <=5 AND evaluation >= 5),
    foreign key(VAT)
     references trainee_doctor(VAT),
    primary key (VAT, date_timestamp)
@@ -205,7 +205,7 @@ create table prescription
 
 create table _procedure
    (name varchar(255),
-   type varchar (255)
+   type varchar (255),
    primary key (name));
 
 create table procedure_in_cosultation
@@ -247,9 +247,9 @@ create table procedure_charting
    date_timestamp DATE,
    quadrant char(2),
    number char(3),
-   foreign key(name),
+   foreign key(name)
       references procedure_in_cosultation(name),
-   foreign key(VAT),
+   foreign key(VAT)
       references procedure_in_cosultation(VAT_doctor),
    foreign key(date_timestamp)
       references procedure_in_cosultation(date_timestamp),
