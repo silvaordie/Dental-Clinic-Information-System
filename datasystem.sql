@@ -1,12 +1,3 @@
---Perguntar o always assigned to
---Candidate keys
---"Are either receptionists, nurses or doctors"
---on delete cascade
--- numeric
--- como usar "procedure", "name", "file"
--- Derived from DATE
--- /0
-
 drop table if exists procedure_charting;
 drop table if exists teeth;
 drop table if exists procedure_radiology;
