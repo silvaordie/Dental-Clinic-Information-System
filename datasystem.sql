@@ -140,10 +140,8 @@ create table consultation_assitant
    (VAT_doctor char(10),
    date_timestamp DATE,
    VAT_nurse char(10),
-   foreign key (VAT_doctor)
-    references appointment(VAT_doctor),
-   foreign key (date_timestamp)
-    references appointment(date_timestamp),
+   foreign key(VAT_doctor,date_timestamp)
+    references appointment(VAT_doctor, date_timestamp),
    foreign key (VAT_nurse)
     references nurse(VAT),
    primary key (VAT_doctor, date_timestamp));
@@ -168,10 +166,8 @@ create table consultation_diagnostic
    (VAT_doctor char(10),
    date_timestamp DATE,
    ID varchar(255),
-   foreign key (VAT_doctor)
-    references consultation(VAT_doctor),
-   foreign key (date_timestamp)
-    references consultation(date_timestamp),
+   foreign key (VAT_doctor, date_timestamp)
+    references consultation(VAT_doctor, date_timestamp),
    foreign key (ID)
     references diagnostic_code(ID),
    primary key (VAT_doctor, date_timestamp, ID));
@@ -189,16 +185,10 @@ create table prescription
    ID varchar(255),
    dosage varchar(255),
    description varchar(255),
-   foreign key (VAT_doctor)
-    references consultation_diagnostic(VAT_doctor),
-   foreign key (date_timestamp)
-    references consultation_diagnostic(date_timestamp),
-   foreign key (ID)
-    references consultation_diagnostic(ID),
-   foreign key (name)
-    references medication(name),
-   foreign key (lab)
-    references medication(lab),
+   foreign key (VAT_doctor, date_timestamp,ID)
+    references consultation_diagnostic(VAT_doctor, date_timestamp,ID),
+   foreign key (name,lab)
+    references medication(name,lab),
    primary key (name, VAT_doctor, date_timestamp, ID));
 
 create table _procedure
@@ -211,10 +201,8 @@ create table procedure_in_cosultation
    VAT_doctor char(10),
    date_timestamp DATE,
    description varchar(255),
-   foreign key (VAT_doctor)
-    references consultation(VAT_doctor),
-   foreign key (date_timestamp)
-    references consultation(date_timestamp),
+   foreign key (VAT_doctor,date_timestamp)
+    references consultation(VAT_doctor, date_timestamp),
    foreign key (name)
     references _procedure(name),
    primary key (name, VAT_doctor, date_timestamp)
@@ -226,10 +214,8 @@ create table procedure_radiology
    VAT_doctor char(10),
    date_timestamp DATE,
    primary key (file, name, VAT_doctor, date_timestamp),
-   foreign key (VAT_doctor)
-    references consultation_diagnostic(VAT_doctor),
-   foreign key (date_timestamp)
-    references consultation_diagnostic(date_timestamp),
+   foreign key (VAT_doctor,date_timestamp)
+    references consultation_diagnostic(VAT_doctor,date_timestamp),
    foreign key (name)
     references _procedure(name));
 
@@ -245,12 +231,8 @@ create table procedure_charting
    date_timestamp DATE,
    quadrant char(2),
    number char(3),
-   foreign key(name)
-      references procedure_in_cosultation(name),
-   foreign key(VAT)
-      references procedure_in_cosultation(VAT_doctor),
-   foreign key(date_timestamp)
-      references procedure_in_cosultation(date_timestamp),
+   foreign key(name, VAT, date_timestamp)
+      references procedure_in_cosultation(name, VAT_doctor, date_timestamp),
    foreign key (quadrant)
       references teeth(quadrant),
    foreign key (number)
