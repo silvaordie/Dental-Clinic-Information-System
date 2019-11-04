@@ -7,28 +7,28 @@
 -- Derived from DATE
 -- /0
 
-drop table if exists phone_number_employee;
-drop table if exists receptionist;
-drop table if exists phone_number_client;
-drop table if exists permanent_doctor;
-drop table if exists trainee_doctor;
-drop table if exists supervision_report;
-drop table if exists appointment;
-drop table if exists consultation;
-drop table if exists consultation_assitant;
-drop table if exists diagnostic_code;
-drop table if exists diagnostic_code_relation;
-drop table if exists consultation_diagnostic;
-drop table if exists medication;
-drop table if exists prescription;
-drop table if exists _procedure;
-drop table if exists procedure_in_cosultation;
-drop table if exists procedure_radiology;
-drop table if exists teeth;
 drop table if exists procedure_charting;
+drop table if exists teeth;
+drop table if exists procedure_radiology;
+drop table if exists procedure_in_cosultation;
+drop table if exists _procedure;
+drop table if exists prescription;
+drop table if exists medication;
+drop table if exists consultation_diagnostic;
+drop table if exists diagnostic_code_relation;
+drop table if exists diagnostic_code;
+drop table if exists consultation_assitant;
+drop table if exists consultation;
+drop table if exists appointment;
+drop table if exists supervision_report;
+drop table if exists trainee_doctor;
+drop table if exists permanent_doctor;
+drop table if exists phone_number_client;
+drop table if exists client;
+drop table if exists receptionist;
 drop table if exists doctor;
 drop table if exists nurse;
-drop table if exists client;
+drop table if exists phone_number_employee;
 drop table if exists employee;
 
 create table employee
