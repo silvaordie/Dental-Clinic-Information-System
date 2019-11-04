@@ -134,7 +134,7 @@ create table consultation
    foreign key(VAT_doctor)
     references appointment(VAT_doctor),
    foreign key(date_timestamp)
-    references appointment(VAT_doctor),
+    references appointment(date_timestamp),
    primary key (VAT_doctor, date_timestamp)
    );
 
