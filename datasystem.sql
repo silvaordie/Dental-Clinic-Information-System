@@ -219,7 +219,7 @@ create table procedure_in_cosultation
    foreign key (date_timestamp)
     references (consultation),
    foreign key (name)
-    references procedure),
+    references _procedure),
    primary key (name, VAT_doctor, date_timestamp)
    );
 
@@ -234,7 +234,7 @@ create table procedure_radiology
    foreign key (date_timestamp)
     references (consultation_diagnostic),
    foreign key (name)
-    references (procedure));
+    references (_procedure));
 
 create table teeth
    (quadrant char(2),
