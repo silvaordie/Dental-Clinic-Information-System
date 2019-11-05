@@ -1,4 +1,4 @@
-1-
+1-   Pronta
 
  select distinct client.VAT, client.name, phone_number_client.phone  
  from client, consultation, employee, appointment , phone_number_client 
@@ -13,7 +13,7 @@
 
 	
 	
-2-
+2- Pronta
 
 (select emp_t.name as name_trainee, emp_t.VAT as VAT_trainee ,emp_d.name as name_doctor , emp_d.VAT as VAT_doctor, supervision_report.evaluation,supervision_report.description
 from employee as emp_t, supervision_report, employee as emp_d, trainee_doctor
@@ -26,7 +26,7 @@ where emp_t.VAT = supervision_report.VAT and trainee_doctor.supervisor=emp_d.VAT
 
 
 
-3- 
+3- Pronta
 
 select distinct client.name, client.city, client.VAT, consultation.SOAP_O
 from client, appointment, consultation
@@ -39,7 +39,7 @@ where appointment.VAT_doctor = consultation.VAT_doctor and consultation.date_tim
 and client.VAT = appointment.VAT_client );
 
 
-4-
+4- Pronta
 
 select client.name , client.VAT, client.street, client.city, client.zip
 from client, appointment
@@ -47,13 +47,14 @@ where client.VAT = appointment.VAT_client and appointment.date_timestamp not in
 (select consultation.date_timestamp from consultation);
 	
 
-5- 
+5- Pronta
 
-select diagnostic_code.ID, diagnostic_code.description, count( distinct prescription.name)
+select diagnostic_code.ID, diagnostic_code.description, count( distinct prescription.name) as counter
 from diagnostic_code, consultation_diagnostic, prescription
 where  prescription.ID = diagnostic_code.ID and consultation_diagnostic.VAT_doctor=prescription.VAT_doctor 
 	and consultation_diagnostic.date_timestamp = prescription.date_timestamp and consultation_diagnostic.ID = prescription.ID
-group by prescription.ID
+	group by prescription.ID
+order by counter asc
 
 6- group function da erro
 
@@ -88,15 +89,14 @@ appointment.VAT_client  = client.VAT having client.age >18)
 	
 
 7- 
-
-select ID, name, lab
-from prescription
-group by ID
-
-having count(name) >= all (
-select count(name )
-from prescription
-group by ID )
+select p.ID, p.name, p.lab
+from prescription as p
+group by p.name
+having count(p.name) >= all (
+select count(p2.name)
+from prescription as p2
+where p2.ID = p.ID
+group by p2.name )
 
 	 
 8- problema nos excepts
