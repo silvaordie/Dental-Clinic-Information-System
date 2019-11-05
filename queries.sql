@@ -1,33 +1,42 @@
 1-
 
-select client.VAT, client.name, phone_number_client.phone 
-from client , phone_number_client, consultation, employee, appointment
-where employee.name = "Jane Sweettooth" and employee.VAT = appointment.VAT_doctor and appointment.date_timestamp = consultation.date_timestamp 
-and appointment.VAT_doctor=consultation.VAT_doctor and appointment.VAT_client = client.VAT and client.VAT = phone_number_client.VAT
-order by client.name;
+ select distinct client.VAT, client.name, phone_number_client.phone  
+ from client, consultation, employee, appointment , phone_number_client 
+ where employee.name = "Jane Sweettooth" and employee.VAT = appointment.VAT_doctor
+ and appointment.date_timestamp = consultation.date_timestamp  
+ and appointment.VAT_doctor=consultation.VAT_doctor  and appointment.VAT_client = client.VAT 
+ and client.VAT  = phone_number_client.VAT 
+ order by client.name;
+
+	
+	
+
+	
 	
 2-
 
-(select employee.name
-from employee, supervision_report
-where employee.VAT = supervision_report.VAT and supervision_report.evaluation < 3)
+(select emp_t.name as name_trainee, emp_t.VAT as VAT_trainee ,emp_d.name as name_doctor , emp_d.VAT as VAT_doctor, supervision_report.evaluation,supervision_report.description
+from employee as emp_t, supervision_report, employee as emp_d, trainee_doctor
+where emp_t.VAT = supervision_report.VAT and trainee_doctor.supervisor=emp_d.VAT
+and supervision_report.evaluation < 3)
 union
-(select employee.name
-from employee, supervision_report
-where employee.VAT = supervision_report.VAT and supervision_report.description like '%insufficient%' );
+(select emp_t.name as name_trainee, emp_t.VAT as VAT_trainee ,emp_d.name as name_doctor , emp_d.VAT as VAT_doctor, supervision_report.evaluation,supervision_report.description
+from employee as emp_t, supervision_report, employee as emp_d, trainee_doctor
+where emp_t.VAT = supervision_report.VAT and trainee_doctor.supervisor=emp_d.VAT and supervision_report.description like '%insufficient%' );
+
+
 
 3- 
 
-select client.name, client.city, client.VAT
+select distinct client.name, client.city, client.VAT, consultation.SOAP_O
 from client, appointment, consultation
 where appointment.VAT_client = client.VAT and consultation.date_timestamp=appointment.date_timestamp 
+and appointment.VAT_doctor = consultation.VAT_doctor and (consultation.SOAP_O like '%gingivitis%' or consultation.SOAP_O like '%periodontitis%')
 and consultation.date_timestamp >= all (
 select consultation.date_timestamp 
 from consultation, appointment
-where appointment.VAT_doctor = consultation.VAT_doctor and client.VAT = appointment.VAT_client
-and (consultation.SOAP_O like '%gingivilis%' or consultation.SOAP_O like '%periodontilis%') );
-		
-		
+where appointment.VAT_doctor = consultation.VAT_doctor and consultation.date_timestamp=appointment.date_timestamp
+and client.VAT = appointment.VAT_client );
 
 
 4-
@@ -35,7 +44,7 @@ and (consultation.SOAP_O like '%gingivilis%' or consultation.SOAP_O like '%perio
 select client.name , client.VAT, client.street, client.city, client.zip
 from client, appointment
 where client.VAT = appointment.VAT_client and appointment.date_timestamp not in
-(select consultation.date_timestamp from consultation)
+(select consultation.date_timestamp from consultation);
 	
 
 5- 
@@ -122,9 +131,6 @@ where client.VAT = appointment.VAT_client and not exists (
 	select 1 from appointment, consultation where appointment.VAT_doctor  =consultation.VAT_doctor 
 	and appointment.date_timestamp=consultation.date_timestamp)
 )
-
-
-
 
 
 

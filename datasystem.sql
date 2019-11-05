@@ -247,6 +247,9 @@ insert into employee values ('123746789', 'Jane Dentedoce', '1980/12/17', 'rua2'
 insert into employee values ('987656789', 'Julio Isidro', '1200/12/17', 'rua', 'cidade2', '2780-485', 'PT50123491234567891234666', 666.80);
 insert into employee values ('123458889', 'João Baião', '1805/12/17', 'rua7', 'cidade3', '2780-777', 'PT50567891234567895432167', 9600);
 
+ 
+
+
 --		doctors
 insert into doctor values ('123456789', 'Expert em caries', 'Boa aluna, mas pessima a tirar sisos','Jane@bluetooth.com');
 insert into doctor values ('987654321', 'Expert em sisos', '3 meses na clinica e ja se fartou','Julia@bluetooth.com');
@@ -264,7 +267,7 @@ insert into trainee_doctor values ('987656789', '123456789');
 
 --		supervision_reports 
 insert into supervision_report values ('987654321', '2018/12/17', 'Boa moça a Julia', 4);
-insert into supervision_report values ('987656789', '2018/12/17', 'Mais piropos', 1);
+insert into supervision_report values ('987656789', '2018/12/17', 'Mais piropos', 2);
 insert into supervision_report values ('987656789', '2017/12/17', 'insufficient', 3);
 
 --		clients 
@@ -273,6 +276,12 @@ insert into client values ('888888888', 'Hugo Burro', '1980/12/17', 'rua1', 'cid
 insert into client values ('777777777', 'Pedro Cebo', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
 insert into client values ('666666666', 'Filipe Bibe', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
 
+
+   --	phone_number_client
+insert into phone_number_client values ('912345678','999999999');
+insert into phone_number_client values ('962345678','999999999');
+
+
 --    appointments
 insert into appointment values ('123456789', '2019/11/17', 'rotina', '999999999');
 insert into appointment values ('123456789', '2019/12/17', 'follow-up', '999999999');
@@ -280,11 +289,13 @@ insert into appointment values ('987654321', '2019/11/17', 'rotina', '888888888'
 insert into appointment values ('987654321', '2019/12/17', 'follow-up', '888888888');
 insert into appointment values ('987656789', '2019/11/17', 'rotina', '777777777');
 insert into appointment values ('987656789', '2019/12/17', 'follow-up', '777777777');
+insert into appointment values ('987656789', '2019/10/17', 'follow-up', '666666666');
+
 --    consultations
 insert into consultation values ('123456789', '2019/11/17', 's', 'gingivitis', 'a', 'p' );
 insert into consultation values ('123456789', '2019/12/17', 's', 'periodontitis', 'a', 'p' );
-insert into consultation values ('987654321', '2019/11/17', 's', 'gingivitis', 'a', 'p' );
-insert into consultation values ('987654321', '2019/12/17', 's', 'periodontitis', 'a', 'p' );
+insert into consultation values ('987654321', '2019/12/17', 's', 'gingivitis', 'a', 'p' );
+insert into consultation values ('987654321', '2019/11/17', 's', 'periodontitis', 'a', 'p' );
 insert into consultation values ('987656789', '2019/11/17', 's', 'o', 'a', 'p' );
 insert into consultation values ('987656789', '2019/12/17', 's', 'o', 'a', 'p' );
 
