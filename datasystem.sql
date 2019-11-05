@@ -246,8 +246,18 @@ insert into employee values ('987654321', 'Julia Sweettooth', '1990/12/17', 'rua
 insert into employee values ('123746789', 'Jane Dentedoce', '1980/12/17', 'rua2', 'cidade3', '2770-255', 'PT50567896734567891234567', 1000);
 insert into employee values ('987656789', 'Julio Isidro', '1200/12/17', 'rua', 'cidade2', '2780-485', 'PT50123491234567891234666', 666.80);
 insert into employee values ('123458889', 'João Baião', '1805/12/17', 'rua7', 'cidade3', '2780-777', 'PT50567891234567895432167', 9600);
+insert into employee values ('123457469', 'Sara Rececao', '1254/12/17', 'rua6', 'cidade74', '2740-777', 'PT50566891274567805432167', 100);
 
- 
+    --	phone_number_employee
+insert into phone_number_employee values ('912345678','123456789');
+insert into phone_number_employee values ('962345678','987654321');
+insert into phone_number_employee values ('962354678','123746789');
+insert into phone_number_employee values ('953414378','987656789');
+insert into phone_number_employee values ('998878574','123458889');
+
+
+--		receptionist
+insert into receptionist values ('123457469');
 
 
 --		doctors
@@ -257,6 +267,17 @@ insert into doctor values ('987656789', 'Expert em piropos', 'Trabalha pouco fal
 
 --    nurses
 insert into nurse values ('123746789');
+
+--		clients 
+insert into client values ('999999999', 'José Bebé', '1990/12/17', 'rua3', 'cidade1', '2780-255', 'M' , 26);
+insert into client values ('888888888', 'Hugo Burro', '1980/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into client values ('777777777', 'Pedro Cebo', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into client values ('666666666', 'Filipe Bibe', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
+
+   --	phone_number_client
+insert into phone_number_client values ('912345878','999999999');
+insert into phone_number_client values ('962345978','999999999');
+
 
 --		permanent_doctors 
 insert into permanent_doctor values ('123456789');
@@ -269,18 +290,6 @@ insert into trainee_doctor values ('987656789', '123456789');
 insert into supervision_report values ('987654321', '2018/12/17', 'Boa moça a Julia', 4);
 insert into supervision_report values ('987656789', '2018/12/17', 'Mais piropos', 2);
 insert into supervision_report values ('987656789', '2017/12/17', 'insufficient', 3);
-
---		clients 
-insert into client values ('999999999', 'José Bebé', '1990/12/17', 'rua3', 'cidade1', '2780-255', 'M' , 26);
-insert into client values ('888888888', 'Hugo Burro', '1980/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
-insert into client values ('777777777', 'Pedro Cebo', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
-insert into client values ('666666666', 'Filipe Bibe', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
-
-
-   --	phone_number_client
-insert into phone_number_client values ('912345678','999999999');
-insert into phone_number_client values ('962345678','999999999');
-
 
 --    appointments
 insert into appointment values ('123456789', '2019/11/17', 'rotina', '999999999');
@@ -306,3 +315,41 @@ insert into consultation_assistant values ('987654321','2019/11/17', '123746789'
 insert into consultation_assistant values ('987654321', '2019/12/17', '123746789' );
 insert into consultation_assistant values ('987656789', '2019/11/17', '123746789' );
 insert into consultation_assistant values ('987656789', '2019/12/17', '123746789' );
+
+-- diagnostic_code
+insert into diagnostic_code values ('D105','constipacao dental');
+insert into diagnostic_code values ('D106','dor no dente');
+insert into diagnostic_code values ('D200','dentes tortos');
+insert into diagnostic_code values ('D204','dentes muito tortos');
+insert into diagnostic_code values ('D000','esta a fingir');
+
+-- diagnostic_code_relation
+
+insert into diagnostic_code_relation values ('D105','D106','dor aguda');
+insert into diagnostic_code_relation values ('D200','D204','aparelho');
+
+-- consultation_diagnostic
+
+insert into consultation_diagnostic values ('123456789', '2019/11/17','D000');
+insert into consultation_diagnostic values ('987654321', '2019/12/17','D204');
+insert into consultation_diagnostic values ('987656789', '2019/11/17','D204');
+insert into consultation_diagnostic values ('987654321','2019/11/17','D204');
+
+-- medication
+
+insert into medication values ('palmada','mae');
+insert into medication values ('medication1','lab1');
+insert into medication values ('medication2','lab1');
+
+-- prescription
+
+insert into prescription values ('palmada','mae','123456789', '2019/11/17','D000','qdo se porta mal','bem dado');
+insert into prescription values ('medication1','lab1','987654321', '2019/12/17','D204','4 em 4 horas','nao esquecer');
+insert into prescription values ('medication2','lab1','987656789', '2019/11/17','D204','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication2','lab1','987654321','2019/11/17','D204','2 em 2 horas','nao esquecer');
+
+
+
+
+
+
