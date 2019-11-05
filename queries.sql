@@ -88,14 +88,17 @@ appointment.VAT_client  = client.VAT having client.age >18)
 
 	
 
-7- 
-select ID, name, lab
-from prescription
-group by ID
-having count(name) >= all (
-select count(name)
-from prescription
-group by ID )
+
+7- Pronta 
+
+select p.ID, p.name, p.lab
+from prescription as p
+group by p.name
+having count(p.name) >= all (
+select count(p2.name)
+from prescription as p2
+where p2.ID = p.ID
+group by p2.name )
 
 	 
 8- problema nos excepts
