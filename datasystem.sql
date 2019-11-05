@@ -242,10 +242,10 @@ create table procedure_charting
    
    --		employees
 insert into employee values ('123456789', 'Jane Sweettooth', '1990/12/17', 'rua', 'cidade', '2780-255', 'PT50567891234567891234567', 900);
-insert into employee values ('987654321', 'Julia Sweettooth', TO_DATE('17/12/1990', 'DD/MM/YYYY'), 'rua2', 'cidade2', '2780-260', 'PT50567891231234891234567', 600);
-insert into employee values ('123746789', 'Jane Dentedoce', TO_DATE('17/12/1980', 'DD/MM/YYYY'), 'rua2', 'cidade3', '2770-255', 'PT50567896734567891234567', 1000);
-insert into employee values ('987656789', 'Julio Isidro', TO_DATE('17/12/1200', 'DD/MM/YYYY'), 'rua', 'cidade2', '2780-485', 'PT50123491234567891234666', 666.80);
-insert into employee values ('123458889', 'João Baião', TO_DATE('17/12/1805', 'DD/MM/YYYY'), 'rua7', 'cidade3', '2780-777', 'PT50567891234567895432167', 9600);
+insert into employee values ('987654321', 'Julia Sweettooth', '1990/12/17', 'rua2', 'cidade2', '2780-260', 'PT50567891231234891234567', 600);
+insert into employee values ('123746789', 'Jane Dentedoce', '1980/12/17', 'rua2', 'cidade3', '2770-255', 'PT50567896734567891234567', 1000);
+insert into employee values ('987656789', 'Julio Isidro', '1200/12/17', 'rua', 'cidade2', '2780-485', 'PT50123491234567891234666', 666.80);
+insert into employee values ('123458889', 'João Baião', '1805/12/17', 'rua7', 'cidade3', '2780-777', 'PT50567891234567895432167', 9600);
 
 --		doctors
 insert into doctor values ('123456789', 'Expert em caries', 'Boa aluna, mas pessima a tirar sisos','Jane@bluetooth.com');
@@ -259,33 +259,39 @@ insert into nurse values ('123746789');
 insert into permanent_doctor values ('123456789');
 
 --		trainee_doctors 
-insert into trainee_doctor values ('987654321', 0, '123456789');
-insert into trainee_doctor values ('987656789', 1, '123456789');
+insert into trainee_doctor values ('987654321','123456789');
+insert into trainee_doctor values ('987656789', '123456789');
 
 --		supervision_reports 
-insert into supervision_report values ('987654321', TO_DATE('17/12/2018', 'DD/MM/YYYY'), 'Boa moça a Julia', 4);
-insert into supervision_report values ('987656789', TO_DATE('17/12/2018', 'DD/MM/YYYY'), 'Mais piropos', 1);
-insert into supervision_report values ('987656789', TO_DATE('17/12/2017', 'DD/MM/YYYY'), 'insufficient', 3);
+insert into supervision_report values ('987654321', '2018/12/17', 'Boa moça a Julia', 4);
+insert into supervision_report values ('987656789', '2018/12/17', 'Mais piropos', 1);
+insert into supervision_report values ('987656789', '2017/12/17', 'insufficient', 3);
 
 --		clients 
-insert into client values ('999999999', 'José Bebé', TO_DATE('17/12/1990', 'DD/MM/YYYY'), 'rua3', 'cidade1', '2780-255', 'M' , 26);
-insert into client values ('888888888', 'Hugo Burro', TO_DATE('17/12/1890', 'DD/MM/YYYY'), 'rua1', 'cidade5', '2780-255', 'M' , 26);
-insert into client values ('777777777', 'Pedro Cebo', TO_DATE('17/12/1890', 'DD/MM/YYYY'), 'rua1', 'cidade5', '2780-255', 'M' , 26);
-insert into client values ('666666666', 'Filipe Bibe', TO_DATE('17/12/1890', 'DD/MM/YYYY'), 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into client values ('999999999', 'José Bebé', '1990/12/17', 'rua3', 'cidade1', '2780-255', 'M' , 26);
+insert into client values ('888888888', 'Hugo Burro', '1980/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into client values ('777777777', 'Pedro Cebo', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
+insert into client values ('666666666', 'Filipe Bibe', '1890/12/17', 'rua1', 'cidade5', '2780-255', 'M' , 26);
 
 --    appointments
-insert into appointment values ('123456789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 'rotina', '999999999');
-insert into appointment values ('987654321', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 'rotina'), '888888888';
-insert into appointment values ('987656789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 'rotina', '777777777');
+insert into appointment values ('123456789', '2019/11/17', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019/12/17', 'follow-up', '999999999');
+insert into appointment values ('987654321', '2019/11/17', 'rotina', '888888888');
+insert into appointment values ('987654321', '2019/12/17', 'follow-up', '888888888');
+insert into appointment values ('987656789', '2019/11/17', 'rotina', '777777777');
+insert into appointment values ('987656789', '2019/12/17', 'follow-up', '777777777');
 --    consultations
-insert into consultation values ('123456789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 's', 'gingivitis', 'a', 'p' );
-insert into consultation values ('987654321', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 's', 'gingivitis', 'a', 'p' );
-insert into consultation values ('987656789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), 's', 'o', 'a', 'p' );
+insert into consultation values ('123456789', '2019/11/17', 's', 'gingivitis', 'a', 'p' );
+insert into consultation values ('123456789', '2019/12/17', 's', 'periodontitis', 'a', 'p' );
+insert into consultation values ('987654321', '2019/11/17', 's', 'gingivitis', 'a', 'p' );
+insert into consultation values ('987654321', '2019/12/17', 's', 'periodontitis', 'a', 'p' );
+insert into consultation values ('987656789', '2019/11/17', 's', 'o', 'a', 'p' );
+insert into consultation values ('987656789', '2019/12/17', 's', 'o', 'a', 'p' );
 
 --    consultation_assistants
-insert into consultation_assistant values ('123456789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), '123746789' );
-insert into consultation_assistant values ('123456789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), '123746789' );
-insert into consultation_assistant values ('987654321', TO_DATE('17/11/2019', 'DD/MM/YYYY'), '123746789' );
-insert into consultation_assistant values ('987654321', TO_DATE('17/12/2019', 'DD/MM/YYYY'), '123746789' );
-insert into consultation_assistant values ('987656789', TO_DATE('17/11/2019', 'DD/MM/YYYY'), '123746789' );
-insert into consultation_assistant values ('987656789', TO_DATE('17/12/2019', 'DD/MM/YYYY'), '123746789' );
+insert into consultation_assistant values ('123456789', '2019/11/17', '123746789' );
+insert into consultation_assistant values ('123456789', '2019/12/17', '123746789' );
+insert into consultation_assistant values ('987654321','2019/11/17', '123746789' );
+insert into consultation_assistant values ('987654321', '2019/12/17', '123746789' );
+insert into consultation_assistant values ('987656789', '2019/11/17', '123746789' );
+insert into consultation_assistant values ('987656789', '2019/12/17', '123746789' );
