@@ -32,6 +32,7 @@ create table employee
    IBAN char(26) unique not null,
    salary  numeric(20,2) CHECK (salary > 0),
    primary key (VAT));
+-- all employees are either receptionists, nurses or doctors
 
 create table phone_number_employee
    (phone char(10),
@@ -50,7 +51,7 @@ create table doctor
    (VAT char(10),
    specialization varchar(255),
    biography varchar(255),
-   email varchar(255) unique,
+   email varchar(255) unique not null,
    primary key(VAT),
    foreign key(VAT)
     references employee(VAT) on delete cascade);
@@ -69,9 +70,10 @@ create table client
    city varchar(255),
    zip char(9),
    gender char(2),
-   age int,
+   age int CHECK (age>0),
    primary key (VAT));
-
+   --age = (current_date - birth_date).years
+   
 create table phone_number_client
    (phone char(10),
    VAT char(10),
@@ -278,7 +280,6 @@ insert into client values ('666666666', 'Filipe Bibe', '1890/12/17', 'rua1', 'ci
 insert into phone_number_client values ('912345878','999999999');
 insert into phone_number_client values ('962345978','999999999');
 
-
 --		permanent_doctors 
 insert into permanent_doctor values ('123456789');
 
@@ -299,6 +300,116 @@ insert into appointment values ('987654321', '2019/12/17', 'follow-up', '8888888
 insert into appointment values ('987656789', '2019/11/17', 'rotina', '777777777');
 insert into appointment values ('987656789', '2019/12/17', 'follow-up', '777777777');
 insert into appointment values ('987656789', '2019/10/17', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-7-21', 'rotina', '888888888');
+insert into appointment values ('123456789', '2019-8-11', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-10-9', 'follow-up', '777777777');
+insert into appointment values ('123456789', '2019-7-28', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-9-19', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-12-8', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-6-26', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-3-29', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-3-25', 'tratamento', '666666666');
+insert into appointment values ('123456789', '2019-6-22', 'rotina', '888888888');
+insert into appointment values ('123456789', '2019-1-12', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-7-2', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-11-29', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-2-15', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-2-14', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-2-23', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-11-3', 'follow-up', '777777777');
+insert into appointment values ('123456789', '2019-6-12', 'follow-up', '777777777');
+insert into appointment values ('123456789', '2019-7-7', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-12-6', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-5-3', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-2-17', 'tratamento', '666666666');
+insert into appointment values ('123456789', '2019-12-30', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-4-12', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-6-14', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-5-10', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-12-3', 'rotina', '888888888');
+insert into appointment values ('123456789', '2019-8-8', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-7-17', 'follow-up', '777777777');
+insert into appointment values ('123456789', '2019-10-23', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-10-17', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-8-4', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-1-28', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-1-27', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-8-6', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-5-17', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-2-3', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-5-21', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-7-3', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-12-20', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-2-17', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-2-29', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-3-4', 'tratamento', '666666666');
+insert into appointment values ('123456789', '2019-5-15', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-11-21', 'rotina', '888888888');
+insert into appointment values ('123456789', '2019-7-9', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-3-25', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-8-26', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-1-22', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-11-7', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-8-24', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-8-13', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-4-27', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-8-20', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-1-7', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-6-29', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-7-21', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-8-13', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-8-12', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-12-18', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-8-1', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-6-17', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-3-18', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-2-11', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-8-16', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-11-11', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-12-11', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-12-19', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-6-11', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-4-20', 'tratamento', '666666666');
+insert into appointment values ('123456789', '2019-8-10', 'tratamento', '666666666');
+insert into appointment values ('123456789', '2019-2-3', 'rotina', '888888888');
+insert into appointment values ('123456789', '2019-11-16', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-7-14', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-7-30', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-1-21', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-8-23', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-11-4', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-8-22', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-7-20', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-6-9', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-12-20', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-2-17', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-3-7', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-10-11', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-9-30', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-2-19', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-8-23', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-1-8', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-5-22', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-10-22', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-4-11', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-7-23', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-1-8', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-3-16', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-5-5', 'rotina', '999999999');
+insert into appointment values ('123456789', '2019-4-29', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-7-6', 'rotina', '666666666');
+insert into appointment values ('123456789', '2019-8-21', 'follow-up', '777777777');
+insert into appointment values ('123456789', '2019-4-17', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-2-13', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-6-5', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-1-23', 'rotina', '777777777');
+insert into appointment values ('123456789', '2019-5-22', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2019-9-27', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2019-11-8', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2019-8-1', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2019-6-2', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2019-3-17', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2019-6-28', 'rotina', '666666666');
 
 --    consultations
 insert into consultation values ('123456789', '2019/11/17', 's', 'gingivitis', 'a', 'p' );
