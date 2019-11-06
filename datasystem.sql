@@ -39,7 +39,7 @@ create table phone_number_employee
    VAT char(10),
    primary key(VAT, phone),
    foreign key(VAT)
-    references employee(VAT));
+    references employee(VAT) on delete cascade);
 
 create table receptionist
    (VAT char(10),
@@ -79,7 +79,7 @@ create table phone_number_client
    VAT char(10),
    primary key(VAT,phone),
    foreign key(VAT)
-    references client(VAT));
+    references client(VAT) on delete cascade);
 
 create table permanent_doctor
    (VAT char(10),
@@ -91,9 +91,9 @@ create table trainee_doctor
    (VAT char(10),
    supervisor char(10),
    foreign key(VAT)
-    references doctor(VAT),
+    references doctor(VAT) on delete cascade,
    foreign key(supervisor)
-    references permanent_doctor(VAT),
+    references permanent_doctor(VAT) on delete cascade,
    primary key (VAT) );
 
 create table supervision_report
@@ -102,7 +102,7 @@ create table supervision_report
    description varchar(255),
    evaluation int CHECK (evaluation <=5 AND evaluation >= 5),
    foreign key(VAT)
-    references trainee_doctor(VAT),
+    references trainee_doctor(VAT) on delete cascade,
    primary key (VAT, date_timestamp)
    );
 
@@ -112,9 +112,9 @@ create table appointment
    description varchar(255),
    VAT_client char(10),
    foreign key(VAT_doctor)
-    references doctor(VAT),
+    references doctor(VAT) on delete cascade,
    foreign key(VAT_client)
-    references client(VAT),
+    references client(VAT) on delete cascade,
    primary key (VAT_doctor, date_timestamp));
 
 create table consultation
@@ -125,7 +125,7 @@ create table consultation
    SOAP_A varchar(255),
    SOAP_P varchar(255),
    foreign key(VAT_doctor,date_timestamp)
-    references appointment(VAT_doctor, date_timestamp),
+    references appointment(VAT_doctor, date_timestamp) on delete cascade,
    primary key (VAT_doctor, date_timestamp)
    );
 
@@ -134,7 +134,7 @@ create table consultation_assistant
    date_timestamp DATE,
    VAT_nurse char(10),
    foreign key(VAT_doctor,date_timestamp)
-    references appointment(VAT_doctor, date_timestamp),
+    references appointment(VAT_doctor, date_timestamp) on delete cascade,
    foreign key (VAT_nurse)
     references nurse(VAT) on delete cascade,
    primary key (VAT_doctor, date_timestamp));
@@ -160,7 +160,7 @@ create table consultation_diagnostic
    date_timestamp DATE,
    ID varchar(255),
    foreign key (VAT_doctor, date_timestamp)
-    references consultation(VAT_doctor, date_timestamp),
+    references consultation(VAT_doctor, date_timestamp) on delete cascade,
    foreign key (ID)
     references diagnostic_code(ID),
    primary key (VAT_doctor, date_timestamp, ID));
@@ -178,10 +178,10 @@ create table prescription
    ID varchar(255),
    dosage varchar(255),
    description varchar(255),
-   foreign key (VAT_doctor, date_timestamp,ID)
-    references consultation_diagnostic(VAT_doctor, date_timestamp,ID),
+   foreign key (VAT_doctor, date_timestamp,ID) 
+    references consultation_diagnostic(VAT_doctor, date_timestamp,ID) on delete cascade,
    foreign key (name,lab)
-    references medication(name,lab),
+    references medication(name,lab) on delete cascade,
    primary key (name, VAT_doctor, date_timestamp, ID));
 
 create table _procedure
@@ -195,9 +195,9 @@ create table procedure_in_consultation
    date_timestamp DATE,
    description varchar(255),
    foreign key (VAT_doctor,date_timestamp)
-    references consultation(VAT_doctor, date_timestamp),
+    references consultation(VAT_doctor, date_timestamp) on delete cascade,
    foreign key (name)
-    references _procedure(name),
+    references _procedure(name) on delete cascade,
    primary key (name, VAT_doctor, date_timestamp)
    );
 
@@ -208,9 +208,9 @@ create table procedure_radiology
    date_timestamp DATE,
    primary key (file, name, VAT_doctor, date_timestamp),
    foreign key (VAT_doctor,date_timestamp)
-    references consultation_diagnostic(VAT_doctor,date_timestamp),
+    references consultation_diagnostic(VAT_doctor,date_timestamp) on delete cascade,
    foreign key (name)
-    references _procedure(name));
+    references _procedure(name) on delete cascade );
 
 create table teeth
    (quadrant char(2),
@@ -225,7 +225,7 @@ create table procedure_charting
    quadrant char(2),
    number char(3),
    foreign key(name, VAT, date_timestamp)
-      references procedure_in_consultation(name, VAT_doctor, date_timestamp),
+      references procedure_in_consultation(name, VAT_doctor, date_timestamp) on delete cascade,
    foreign key (quadrant, number)
       references teeth(quadrant, number),
    primary key (name, VAT, date_timestamp, quadrant, number)
