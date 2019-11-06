@@ -52,35 +52,81 @@ where  prescription.ID = diagnostic_code.ID and consultation_diagnostic.VAT_doct
 	group by prescription.ID
 order by counter asc
 
-6- group function da erro
 
-(select avg(count(consultation_assistant.VAT_nurse)), avg(count(procedure_in_consultation.name)), avg(count(consultation_diagnostic.ID)),
-avg(count(prescription.name))
-from consultation_assistant, procedure_in_consultation, consultation_diagnostic, prescription, appointment, client
-where extract(year from consultation_assistant.date_timestamp)='2019' and 
-extract(year from procedure_in_consultation.date_timestamp)='2019' and
-extract(year from consultation_diagnostic.date_timestamp)='2019' and
-extract(year from prescription.date_timestamp)='2019' and
-consultation_assistant.VAT_doctor = appointment.VAT_doctor and consultation_assistant.date_timestamp = appointment.date_timestamp and	
-procedure_in_consultation.VAT_doctor = appointment.VAT_doctor and procedure_in_consultation.date_timestamp = appointment.date_timestamp and	
-consultation_diagnostic.VAT_doctor = appointment.VAT_doctor and consultation_diagnostic.date_timestamp = appointment.date_timestamp and	
-prescription.VAT_doctor = appointment.VAT_doctor and prescription.date_timestamp = appointment.date_timestamp and	
-appointment.VAT_client  = client.VAT having client.age <=18)
-	
+
+6- Pronta
+
+(select avg(nurses), avg(procedures), avg(diagnosis), avg(prescriptions) from
+(select count(nurse.n) as nurses from
+(select consultation_assistant.VAT_nurse as n, consultation_assistant.VAT_doctor as d, consultation_assistant.date_timestamp as t
+from consultation_assistant, appointment, client
+where appointment.date_timestamp = consultation_assistant.date_timestamp
+and appointment.VAT_doctor = consultation_assistant.VAT_doctor
+and extract(year from consultation_assistant.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age < 18) as nurse
+group by nurse.d, nurse.t) as n1,
+(select count(proc.n) as procedures from
+(select procedure_in_consultation.name as n, procedure_in_consultation.VAT_doctor as d, procedure_in_consultation.date_timestamp as t
+from procedure_in_consultation, appointment, client
+where appointment.date_timestamp = procedure_in_consultation.date_timestamp
+and appointment.VAT_doctor = procedure_in_consultation.VAT_doctor
+and extract(year from procedure_in_consultation.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age < 18) as proc
+group by proc.d, proc.t) as n2,
+(select count(diagnostic.ID) as diagnosis from
+(select consultation_diagnostic.ID as ID,
+consultation_diagnostic.VAT_doctor as d, consultation_diagnostic.date_timestamp as t
+from consultation_diagnostic, appointment, client
+where appointment.date_timestamp = consultation_diagnostic.date_timestamp
+and appointment.VAT_doctor = consultation_diagnostic.VAT_doctor
+and extract(year from consultation_diagnostic.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age < 18) as diagnostic
+group by diagnostic.d, diagnostic.t) as n3,
+(select count(distinct concat(presc.n, presc.l)) as prescriptions from
+(select prescription.name as n, prescription.lab as l,
+prescription.VAT_doctor as d, prescription.date_timestamp as t
+from prescription, appointment, client
+where appointment.date_timestamp = prescription.date_timestamp
+and appointment.VAT_doctor = prescription.VAT_doctor
+and extract(year from prescription.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age < 18) as presc
+group by presc.d, presc.t) as n4)
 union all
-
-(select avg(count(consultation_assistant.VAT_nurse)), avg(count(procedure_in_consultation.name)), avg(count(consultation_diagnostic.ID)),
-avg(count(prescription.name))
-from consultation_assistant, procedure_in_consultation, consultation_diagnostic, prescription, appointment, client
-where extract(year from consultation_assistant.date_timestamp)='2019' and 
-extract(year from procedure_in_consultation.date_timestamp)='2019' and
-extract(year from consultation_diagnostic.date_timestamp)='2019' and
-extract(year from prescription.date_timestamp)='2019' and
-consultation_assistant.VAT_doctor = appointment.VAT_doctor and consultation_assistant.date_timestamp = appointment.date_timestamp and	
-procedure_in_consultation.VAT_doctor = appointment.VAT_doctor and procedure_in_consultation.date_timestamp = appointment.date_timestamp and	
-consultation_diagnostic.VAT_doctor = appointment.VAT_doctor and consultation_diagnostic.date_timestamp = appointment.date_timestamp and	
-prescription.VAT_doctor = appointment.VAT_doctor and prescription.date_timestamp = appointment.date_timestamp and	
-appointment.VAT_client  = client.VAT having client.age >18)
+(select avg(nurses), avg(procedures), avg(diagnosis), avg(prescriptions) from
+(select count(nurse.n) as nurses from
+(select consultation_assistant.VAT_nurse as n, consultation_assistant.VAT_doctor as d, consultation_assistant.date_timestamp as t
+from consultation_assistant, appointment, client
+where appointment.date_timestamp = consultation_assistant.date_timestamp
+and appointment.VAT_doctor = consultation_assistant.VAT_doctor
+and extract(year from consultation_assistant.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age >= 18) as nurse
+group by nurse.d, nurse.t) as n1,
+(select count(proc.n) as procedures from
+(select procedure_in_consultation.name as n, procedure_in_consultation.VAT_doctor as d, procedure_in_consultation.date_timestamp as t
+from procedure_in_consultation, appointment, client
+where appointment.date_timestamp = procedure_in_consultation.date_timestamp
+and appointment.VAT_doctor = procedure_in_consultation.VAT_doctor
+and extract(year from procedure_in_consultation.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age >= 18) as proc
+group by proc.d, proc.t) as n2,
+(select count(diagnostic.ID) as diagnosis from
+(select consultation_diagnostic.ID as ID,
+consultation_diagnostic.VAT_doctor as d, consultation_diagnostic.date_timestamp as t
+from consultation_diagnostic, appointment, client
+where appointment.date_timestamp = consultation_diagnostic.date_timestamp
+and appointment.VAT_doctor = consultation_diagnostic.VAT_doctor
+and extract(year from consultation_diagnostic.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age >= 18) as diagnostic
+group by diagnostic.d, diagnostic.t) as n3,
+(select count(distinct concat(presc.n, presc.l)) as prescriptions from
+(select prescription.name as n, prescription.lab as l,
+prescription.VAT_doctor as d, prescription.date_timestamp as t
+from prescription, appointment, client
+where appointment.date_timestamp = prescription.date_timestamp
+and appointment.VAT_doctor = prescription.VAT_doctor
+and extract(year from prescription.date_timestamp) = '2019'
+and client.VAT = appointment.VAT_client and client.age >= 18) as presc
+group by presc.d, presc.t) as n4);
 
 	
 
