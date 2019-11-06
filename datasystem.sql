@@ -459,6 +459,20 @@ insert into prescription values ('medication1','lab1','987654321', '2019/12/17',
 insert into prescription values ('medication2','lab1','987656789', '2019/11/17','D204','2 em 2 horas','nao esquecer');
 insert into prescription values ('medication2','lab1','987654321','2019/11/17','D204','2 em 2 horas','nao esquecer');
 
+-- procedure
+
+insert into _procedure values ('d4 charting', 'dental charting');
+insert into _procedure values ('leg radiography', 'x-ray');
+insert into _procedure values ('arm radiography', 'x-ray');
+
+-- procedure_in_consultation
+
+insert into procedure_in_consultation values ('d4 charting', '123456789', '2019/11/17', 'arrancar');
+insert into procedure_in_consultation values ('leg radiography', '987656789', '2019/11/17', 'fotografar');
+insert into procedure_in_consultation values ('leg radiography', '123456789', '2019/11/17', 'correu mal');
+insert into procedure_in_consultation values ('leg radiography', '123456789', '2019/12/17', 'partido');
+insert into procedure_in_consultation values ('arm radiography', '123456789', '2019/11/17', 'fraturado');
+
 
 
 
