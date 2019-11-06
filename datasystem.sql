@@ -32,6 +32,7 @@ create table employee
    IBAN char(26) unique not null,
    salary  numeric(20,2) CHECK (salary > 0),
    primary key (VAT));
+-- all employees are either receptionists, nurses or doctors
 
 create table phone_number_employee
    (phone char(10),
@@ -50,7 +51,7 @@ create table doctor
    (VAT char(10),
    specialization varchar(255),
    biography varchar(255),
-   email varchar(255) unique,
+   email varchar(255) unique not null,
    primary key(VAT),
    foreign key(VAT)
     references employee(VAT) on delete cascade);
@@ -69,9 +70,10 @@ create table client
    city varchar(255),
    zip char(9),
    gender char(2),
-   age int,
+   age int CHECK (age>0),
    primary key (VAT));
-
+   --age = (current_date - birth_date).years
+   
 create table phone_number_client
    (phone char(10),
    VAT char(10),
