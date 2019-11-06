@@ -9,10 +9,6 @@
  order by client.name;
 
 	
-	
-
-	
-	
 2- Pronta
 
 (select emp_t.name as name_trainee, emp_t.VAT as VAT_trainee ,emp_d.name as name_doctor , emp_d.VAT as VAT_doctor, supervision_report.evaluation,supervision_report.description
@@ -100,57 +96,34 @@ where p2.ID = p.ID
 group by p2.name )
 
 	 
-8- problema nos excepts
+8- pronta
 
 select prescription.name , prescription.lab
 from prescription, diagnostic_code
 where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
-and diagnostic_code.description like '%dental cavities%' and (prescription.name,prescription.lab) not in 
+and diagnostic_code.description like '%dental  cavities%' and (prescription.name,prescription.lab) not in 
 (select prescription.name , prescription.lab
 from prescription, diagnostic_code
 where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
-and diagnostic_code.description like '%infectious deseases%')
+and diagnostic_code.description like '%infectious  disease%')
 group by prescription.name
 order by prescription.name;
 
 
+9- pronta
 
 
-
-
-
-
-
-(select prescription.name , prescription.lab
-from prescription, diagnostic_code
-where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
-and diagnostic_code.description like '%dental cavities%')	
-except
-(select prescription.name , prescription.lab
-from prescription, diagnostic_code
-where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
-and diagnostic_code.description like '%infectious deseases%')
-
-
-
-group by prescription.name
-order by prescription.name
-
-9- problema nos excepts
-
-
-select client.name , client.street, client.city, client.zip
+select distinct client.name , client.street, client.city, client.zip
 from client, appointment
 where client.VAT = appointment.VAT_client and extract(year from appointment.date_timestamp) = '2019'
-
-except
-
+and (client.name , client.street, client.city, client.zip) not in (
 select client.name , client.street, client.city, client.zip
 from client, appointment
 where client.VAT = appointment.VAT_client and not exists (
 	select 1 from appointment, consultation where appointment.VAT_doctor  =consultation.VAT_doctor 
-	and appointment.date_timestamp=consultation.date_timestamp)
+	and appointment.date_timestamp=consultation.date_timestamp)	
 )
+
 
 
 

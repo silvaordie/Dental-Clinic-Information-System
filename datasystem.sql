@@ -433,8 +433,8 @@ insert into diagnostic_code values ('D106','dor no dente');
 insert into diagnostic_code values ('D200','dentes tortos');
 insert into diagnostic_code values ('D204','dentes muito tortos');
 insert into diagnostic_code values ('D000','esta a fingir');
-insert into diagnostic_code values ('D501','infectious  disease');
-insert into diagnostic_code values ('D502','dental  cavities');
+insert into diagnostic_code values ('D501','infectious disease');
+insert into diagnostic_code values ('D502','dental cavities');
 
 
 -- diagnostic_code_relation
