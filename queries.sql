@@ -88,13 +88,8 @@ appointment.VAT_client  = client.VAT having client.age >18)
 
 	
 
-<<<<<<< HEAD
-7- 
-=======
-
 7- Pronta 
 
->>>>>>> 2d22e1d62361d05584111e60cc99bd2fe88cf3db
 select p.ID, p.name, p.lab
 from prescription as p
 group by p.name
@@ -103,10 +98,6 @@ select count(p2.name)
 from prescription as p2
 where p2.ID = p.ID
 group by p2.name )
-<<<<<<< HEAD
-
-=======
->>>>>>> 2d22e1d62361d05584111e60cc99bd2fe88cf3db
 
 	 
 8- problema nos excepts
