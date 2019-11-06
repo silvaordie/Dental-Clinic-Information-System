@@ -16,8 +16,11 @@ having count(VAT_doctor) >= 100
 )
 
 
-3 - 
-
-
+3 - done
 delete from employee
 where name = 'Jane Sweettooth'
+
+
+
+4 - 
+update 
