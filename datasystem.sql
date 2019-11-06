@@ -39,7 +39,7 @@ create table phone_number_employee
    VAT char(10),
    primary key(VAT, phone),
    foreign key(VAT)
-    references employee(VAT));
+    references employee(VAT) on delete cascade);
 
 create table receptionist
    (VAT char(10),
@@ -79,7 +79,7 @@ create table phone_number_client
    VAT char(10),
    primary key(VAT,phone),
    foreign key(VAT)
-    references client(VAT));
+    references client(VAT) on delete cascade);
 
 create table permanent_doctor
    (VAT char(10),
@@ -91,9 +91,9 @@ create table trainee_doctor
    (VAT char(10),
    supervisor char(10),
    foreign key(VAT)
-    references doctor(VAT),
+    references doctor(VAT) on delete cascade,
    foreign key(supervisor)
-    references permanent_doctor(VAT),
+    references permanent_doctor(VAT) on delete cascade,
    primary key (VAT) );
 
 create table supervision_report
@@ -102,7 +102,7 @@ create table supervision_report
    description varchar(255),
    evaluation int CHECK (evaluation <=5 AND evaluation >= 5),
    foreign key(VAT)
-    references trainee_doctor(VAT),
+    references trainee_doctor(VAT) on delete cascade,
    primary key (VAT, date_timestamp)
    );
 
@@ -112,9 +112,9 @@ create table appointment
    description varchar(255),
    VAT_client char(10),
    foreign key(VAT_doctor)
-    references doctor(VAT),
+    references doctor(VAT) on delete cascade,
    foreign key(VAT_client)
-    references client(VAT),
+    references client(VAT) on delete cascade,
    primary key (VAT_doctor, date_timestamp));
 
 create table consultation
@@ -125,7 +125,7 @@ create table consultation
    SOAP_A varchar(255),
    SOAP_P varchar(255),
    foreign key(VAT_doctor,date_timestamp)
-    references appointment(VAT_doctor, date_timestamp),
+    references appointment(VAT_doctor, date_timestamp) on delete cascade,
    primary key (VAT_doctor, date_timestamp)
    );
 
@@ -134,7 +134,7 @@ create table consultation_assistant
    date_timestamp DATE,
    VAT_nurse char(10),
    foreign key(VAT_doctor,date_timestamp)
-    references appointment(VAT_doctor, date_timestamp),
+    references appointment(VAT_doctor, date_timestamp) on delete cascade,
    foreign key (VAT_nurse)
     references nurse(VAT) on delete cascade,
    primary key (VAT_doctor, date_timestamp));
@@ -160,7 +160,7 @@ create table consultation_diagnostic
    date_timestamp DATE,
    ID varchar(255),
    foreign key (VAT_doctor, date_timestamp)
-    references consultation(VAT_doctor, date_timestamp),
+    references consultation(VAT_doctor, date_timestamp) on delete cascade,
    foreign key (ID)
     references diagnostic_code(ID),
    primary key (VAT_doctor, date_timestamp, ID));
@@ -178,10 +178,10 @@ create table prescription
    ID varchar(255),
    dosage varchar(255),
    description varchar(255),
-   foreign key (VAT_doctor, date_timestamp,ID)
-    references consultation_diagnostic(VAT_doctor, date_timestamp,ID),
+   foreign key (VAT_doctor, date_timestamp,ID) 
+    references consultation_diagnostic(VAT_doctor, date_timestamp,ID) on delete cascade,
    foreign key (name,lab)
-    references medication(name,lab),
+    references medication(name,lab) on delete cascade,
    primary key (name, VAT_doctor, date_timestamp, ID));
 
 create table _procedure
@@ -195,9 +195,9 @@ create table procedure_in_consultation
    date_timestamp DATE,
    description varchar(255),
    foreign key (VAT_doctor,date_timestamp)
-    references consultation(VAT_doctor, date_timestamp),
+    references consultation(VAT_doctor, date_timestamp) on delete cascade,
    foreign key (name)
-    references _procedure(name),
+    references _procedure(name) on delete cascade,
    primary key (name, VAT_doctor, date_timestamp)
    );
 
@@ -208,9 +208,9 @@ create table procedure_radiology
    date_timestamp DATE,
    primary key (file, name, VAT_doctor, date_timestamp),
    foreign key (VAT_doctor,date_timestamp)
-    references consultation_diagnostic(VAT_doctor,date_timestamp),
+    references consultation_diagnostic(VAT_doctor,date_timestamp) on delete cascade,
    foreign key (name)
-    references _procedure(name));
+    references _procedure(name) on delete cascade );
 
 create table teeth
    (quadrant char(2),
@@ -225,7 +225,7 @@ create table procedure_charting
    quadrant char(2),
    number char(3),
    foreign key(name, VAT, date_timestamp)
-      references procedure_in_consultation(name, VAT_doctor, date_timestamp),
+      references procedure_in_consultation(name, VAT_doctor, date_timestamp) on delete cascade,
    foreign key (quadrant, number)
       references teeth(quadrant, number),
    primary key (name, VAT, date_timestamp, quadrant, number)
@@ -340,13 +340,13 @@ insert into appointment values ('123456789', '2019-2-3', 'rotina', '666666666');
 insert into appointment values ('123456789', '2019-5-21', 'tratamento', '999999999');
 insert into appointment values ('123456789', '2019-7-3', 'follow-up', '666666666');
 insert into appointment values ('123456789', '2019-12-20', 'rotina', '666666666');
-insert into appointment values ('123456789', '2019-2-17', 'follow-up', '666666666');
+insert into appointment values ('123456789', '2018-2-17', 'follow-up', '666666666');
 insert into appointment values ('123456789', '2019-2-29', 'follow-up', '999999999');
 insert into appointment values ('123456789', '2019-3-4', 'tratamento', '666666666');
 insert into appointment values ('123456789', '2019-5-15', 'tratamento', '999999999');
 insert into appointment values ('123456789', '2019-11-21', 'rotina', '888888888');
 insert into appointment values ('123456789', '2019-7-9', 'rotina', '777777777');
-insert into appointment values ('123456789', '2019-3-25', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2017-3-25', 'tratamento', '888888888');
 insert into appointment values ('123456789', '2019-8-26', 'follow-up', '888888888');
 insert into appointment values ('123456789', '2019-1-22', 'tratamento', '888888888');
 insert into appointment values ('123456789', '2019-11-7', 'rotina', '777777777');
@@ -355,9 +355,9 @@ insert into appointment values ('123456789', '2019-8-13', 'follow-up', '66666666
 insert into appointment values ('123456789', '2019-4-27', 'rotina', '666666666');
 insert into appointment values ('123456789', '2019-8-20', 'rotina', '666666666');
 insert into appointment values ('123456789', '2019-1-7', 'rotina', '666666666');
-insert into appointment values ('123456789', '2019-6-29', 'rotina', '999999999');
-insert into appointment values ('123456789', '2019-7-21', 'tratamento', '777777777');
-insert into appointment values ('123456789', '2019-8-13', 'rotina', '666666666');
+insert into appointment values ('123456789', '2017-6-29', 'rotina', '999999999');
+insert into appointment values ('123456789', '2017-7-21', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2018-8-13', 'rotina', '666666666');
 insert into appointment values ('123456789', '2019-8-12', 'follow-up', '888888888');
 insert into appointment values ('123456789', '2019-12-18', 'rotina', '777777777');
 insert into appointment values ('123456789', '2019-8-1', 'follow-up', '888888888');
@@ -371,7 +371,7 @@ insert into appointment values ('123456789', '2019-12-19', 'follow-up', '8888888
 insert into appointment values ('123456789', '2019-6-11', 'tratamento', '777777777');
 insert into appointment values ('123456789', '2019-4-20', 'tratamento', '666666666');
 insert into appointment values ('123456789', '2019-8-10', 'tratamento', '666666666');
-insert into appointment values ('123456789', '2019-2-3', 'rotina', '888888888');
+insert into appointment values ('123456789', '2017-2-3', 'rotina', '888888888');
 insert into appointment values ('123456789', '2019-11-16', 'tratamento', '777777777');
 insert into appointment values ('123456789', '2019-7-14', 'tratamento', '999999999');
 insert into appointment values ('123456789', '2019-7-30', 'follow-up', '999999999');
@@ -381,19 +381,19 @@ insert into appointment values ('123456789', '2019-11-4', 'tratamento', '7777777
 insert into appointment values ('123456789', '2019-8-22', 'rotina', '666666666');
 insert into appointment values ('123456789', '2019-7-20', 'follow-up', '888888888');
 insert into appointment values ('123456789', '2019-6-9', 'tratamento', '777777777');
-insert into appointment values ('123456789', '2019-12-20', 'follow-up', '888888888');
-insert into appointment values ('123456789', '2019-2-17', 'tratamento', '888888888');
+insert into appointment values ('123456789', '2018-12-20', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2017-2-17', 'tratamento', '888888888');
 insert into appointment values ('123456789', '2019-3-7', 'rotina', '777777777');
 insert into appointment values ('123456789', '2019-10-11', 'follow-up', '888888888');
 insert into appointment values ('123456789', '2019-9-30', 'follow-up', '888888888');
-insert into appointment values ('123456789', '2019-2-19', 'tratamento', '999999999');
-insert into appointment values ('123456789', '2019-8-23', 'follow-up', '999999999');
+insert into appointment values ('123456789', '2018-2-19', 'tratamento', '999999999');
+insert into appointment values ('123456789', '2018-8-23', 'follow-up', '999999999');
 insert into appointment values ('123456789', '2019-1-8', 'rotina', '999999999');
 insert into appointment values ('123456789', '2019-5-22', 'rotina', '999999999');
 insert into appointment values ('123456789', '2019-10-22', 'follow-up', '999999999');
 insert into appointment values ('123456789', '2019-4-11', 'tratamento', '888888888');
 insert into appointment values ('123456789', '2019-7-23', 'follow-up', '888888888');
-insert into appointment values ('123456789', '2019-1-8', 'rotina', '666666666');
+insert into appointment values ('123456789', '2017-1-8', 'rotina', '666666666');
 insert into appointment values ('123456789', '2019-3-16', 'rotina', '777777777');
 insert into appointment values ('123456789', '2019-5-5', 'rotina', '999999999');
 insert into appointment values ('123456789', '2019-4-29', 'tratamento', '999999999');
@@ -403,10 +403,10 @@ insert into appointment values ('123456789', '2019-4-17', 'follow-up', '66666666
 insert into appointment values ('123456789', '2019-2-13', 'tratamento', '777777777');
 insert into appointment values ('123456789', '2019-6-5', 'follow-up', '999999999');
 insert into appointment values ('123456789', '2019-1-23', 'rotina', '777777777');
-insert into appointment values ('123456789', '2019-5-22', 'tratamento', '777777777');
+insert into appointment values ('123456789', '2017-5-21', 'tratamento', '777777777');
 insert into appointment values ('123456789', '2019-9-27', 'tratamento', '888888888');
 insert into appointment values ('123456789', '2019-11-8', 'follow-up', '666666666');
-insert into appointment values ('123456789', '2019-8-1', 'follow-up', '888888888');
+insert into appointment values ('123456789', '2017-8-1', 'follow-up', '888888888');
 insert into appointment values ('123456789', '2019-6-2', 'tratamento', '999999999');
 insert into appointment values ('123456789', '2019-3-17', 'follow-up', '999999999');
 insert into appointment values ('123456789', '2019-6-28', 'rotina', '666666666');
@@ -433,6 +433,9 @@ insert into diagnostic_code values ('D106','dor no dente');
 insert into diagnostic_code values ('D200','dentes tortos');
 insert into diagnostic_code values ('D204','dentes muito tortos');
 insert into diagnostic_code values ('D000','esta a fingir');
+insert into diagnostic_code values ('D501','infectious disease');
+insert into diagnostic_code values ('D502','dental cavities');
+
 
 -- diagnostic_code_relation
 
@@ -445,6 +448,8 @@ insert into consultation_diagnostic values ('123456789', '2019/11/17','D000');
 insert into consultation_diagnostic values ('987654321', '2019/12/17','D204');
 insert into consultation_diagnostic values ('987656789', '2019/11/17','D204');
 insert into consultation_diagnostic values ('987654321','2019/11/17','D204');
+insert into consultation_diagnostic values ('123456789', '2019/12/17','D501');
+insert into consultation_diagnostic values ('987656789', '2019/12/17','D502');
 
 -- medication
 
@@ -458,6 +463,8 @@ insert into prescription values ('palmada','mae','123456789', '2019/11/17','D000
 insert into prescription values ('medication1','lab1','987654321', '2019/12/17','D204','4 em 4 horas','nao esquecer');
 insert into prescription values ('medication2','lab1','987656789', '2019/11/17','D204','2 em 2 horas','nao esquecer');
 insert into prescription values ('medication2','lab1','987654321','2019/11/17','D204','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication2','lab1','123456789', '2019/12/17','D501','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication1','lab1','987656789', '2019/12/17','D502','2 em 2 horas','nao esquecer');
 
 -- procedure
 
