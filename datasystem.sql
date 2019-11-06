@@ -224,6 +224,8 @@ create table procedure_charting
    date_timestamp DATE,
    quadrant char(2),
    number char(3),
+   description varchar(255),
+   measure char(5),
    foreign key(name, VAT, date_timestamp)
       references procedure_in_consultation(name, VAT_doctor, date_timestamp) on update cascade on delete cascade,
    foreign key (quadrant, number)
@@ -422,7 +424,7 @@ insert into consultation values ('987656789', '2019/12/17', 's', 'o', 'a', 'p' )
 --    consultation_assistants
 insert into consultation_assistant values ('123456789', '2019/11/17', '123746789' );
 insert into consultation_assistant values ('123456789', '2019/12/17', '123746789' );
-insert into consultation_assistant values ('987654321','2019/11/17', '123746789' );
+insert into consultation_assistant values ('987654321', '2019/11/17', '123746789' );
 insert into consultation_assistant values ('987654321', '2019/12/17', '123746789' );
 insert into consultation_assistant values ('987656789', '2019/11/17', '123746789' );
 insert into consultation_assistant values ('987656789', '2019/12/17', '123746789' );
@@ -435,6 +437,8 @@ insert into diagnostic_code values ('D204','dentes muito tortos');
 insert into diagnostic_code values ('D000','esta a fingir');
 insert into diagnostic_code values ('D501','infectious disease');
 insert into diagnostic_code values ('D502','dental cavities');
+insert into diagnostic_code values ('D12','gingivitis');
+
 
 
 -- diagnostic_code_relation
@@ -444,11 +448,11 @@ insert into diagnostic_code_relation values ('D200','D204','aparelho');
 
 -- consultation_diagnostic
 
-insert into consultation_diagnostic values ('123456789', '2019/11/17','D000');
-insert into consultation_diagnostic values ('987654321', '2019/12/17','D204');
+insert into consultation_diagnostic values ('123456789', '2019/11/17','D12');
+insert into consultation_diagnostic values ('987654321', '2019/12/17','D12');
 insert into consultation_diagnostic values ('987656789', '2019/11/17','D204');
-insert into consultation_diagnostic values ('987654321','2019/11/17','D204');
-insert into consultation_diagnostic values ('123456789', '2019/12/17','D501');
+insert into consultation_diagnostic values ('987654321', '2019/11/17','D12');
+insert into consultation_diagnostic values ('123456789', '2019/12/17','D12');
 insert into consultation_diagnostic values ('987656789', '2019/12/17','D502');
 
 -- medication
@@ -459,11 +463,11 @@ insert into medication values ('medication2','lab1');
 
 -- prescription
 
-insert into prescription values ('palmada','mae','123456789', '2019/11/17','D000','qdo se porta mal','bem dado');
-insert into prescription values ('medication1','lab1','987654321', '2019/12/17','D204','4 em 4 horas','nao esquecer');
+insert into prescription values ('palmada','mae','123456789', '2019/11/17','D12','qdo se porta mal','bem dado');
+insert into prescription values ('medication1','lab1','987654321', '2019/12/17','D12','4 em 4 horas','nao esquecer');
 insert into prescription values ('medication2','lab1','987656789', '2019/11/17','D204','2 em 2 horas','nao esquecer');
-insert into prescription values ('medication2','lab1','987654321','2019/11/17','D204','2 em 2 horas','nao esquecer');
-insert into prescription values ('medication2','lab1','123456789', '2019/12/17','D501','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication2','lab1','987654321','2019/11/17','D12','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication2','lab1','123456789', '2019/12/17','D12','2 em 2 horas','nao esquecer');
 insert into prescription values ('medication1','lab1','987656789', '2019/12/17','D502','2 em 2 horas','nao esquecer');
 
 -- procedure
@@ -475,13 +479,24 @@ insert into _procedure values ('arm radiography', 'x-ray');
 -- procedure_in_consultation
 
 insert into procedure_in_consultation values ('d4 charting', '123456789', '2019/11/17', 'arrancar');
+insert into procedure_in_consultation values ('d4 charting', '123456789', '2019/12/17', 'arrancar');
 insert into procedure_in_consultation values ('leg radiography', '987656789', '2019/11/17', 'fotografar');
 insert into procedure_in_consultation values ('leg radiography', '123456789', '2019/11/17', 'correu mal');
 insert into procedure_in_consultation values ('leg radiography', '123456789', '2019/12/17', 'partido');
 insert into procedure_in_consultation values ('arm radiography', '123456789', '2019/11/17', 'fraturado');
 
+-- procedure radiology
+
+insert into procedure_radiology values ('leg radiography','file1', '987656789', '2019/11/17');
+insert into procedure_radiology values ('leg radiography','file 2', '123456789', '2019/11/17');
+insert into procedure_radiology values ('leg radiography','file 3', '123456789', '2019/11/17');
+insert into procedure_radiology values ('arm radiography','file4', '123456789', '2019/11/17');
 
 
+-- teeth
+insert into teeth values ('3','10','dente1');
+insert into teeth values ('5','6','dente2');
+insert into teeth values ('2','7','dente3');
 
-
-
+insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','3','10','jabcw','2');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','2','7','ajc','5');
