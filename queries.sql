@@ -69,7 +69,8 @@ consultation_assistant.VAT_doctor = appointment.VAT_doctor and consultation_assi
 procedure_in_consultation.VAT_doctor = appointment.VAT_doctor and procedure_in_consultation.date_timestamp = appointment.date_timestamp and	
 consultation_diagnostic.VAT_doctor = appointment.VAT_doctor and consultation_diagnostic.date_timestamp = appointment.date_timestamp and	
 prescription.VAT_doctor = appointment.VAT_doctor and prescription.date_timestamp = appointment.date_timestamp and	
-appointment.VAT_client  = client.VAT having client.age <=18)
+appointment.VAT_client  = client.VAT
+having client.age <=18)
 	
 union all
 
@@ -84,7 +85,14 @@ consultation_assistant.VAT_doctor = appointment.VAT_doctor and consultation_assi
 procedure_in_consultation.VAT_doctor = appointment.VAT_doctor and procedure_in_consultation.date_timestamp = appointment.date_timestamp and	
 consultation_diagnostic.VAT_doctor = appointment.VAT_doctor and consultation_diagnostic.date_timestamp = appointment.date_timestamp and	
 prescription.VAT_doctor = appointment.VAT_doctor and prescription.date_timestamp = appointment.date_timestamp and	
-appointment.VAT_client  = client.VAT having client.age >18)
+appointment.VAT_client  = client.VAT
+having client.age >18);
+
+select avg(nurses), avg(procedures), avg(diagnosis), avg(prescriptions) from
+(select count(VAT_nurse) as nurses from consultation_assistant group by VAT_doctor, date_timestamp) as n1,
+(select count(name) as procedures from procedure_in_consultation group by VAT_doctor, date_timestamp) as n2,
+(select count(ID) as diagnosis from consultation_diagnostic group by VAT_doctor, date_timestamp) as n3,
+(select count(distinct concat(name, lab)) as prescriptions from prescription group by VAT_doctor, date_timestamp) as n4
 
 	
 
