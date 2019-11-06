@@ -322,6 +322,9 @@ insert into diagnostic_code values ('D106','dor no dente');
 insert into diagnostic_code values ('D200','dentes tortos');
 insert into diagnostic_code values ('D204','dentes muito tortos');
 insert into diagnostic_code values ('D000','esta a fingir');
+insert into diagnostic_code values ('D501','infectious  disease');
+insert into diagnostic_code values ('D502','dental  cavities');
+
 
 -- diagnostic_code_relation
 
@@ -334,6 +337,8 @@ insert into consultation_diagnostic values ('123456789', '2019/11/17','D000');
 insert into consultation_diagnostic values ('987654321', '2019/12/17','D204');
 insert into consultation_diagnostic values ('987656789', '2019/11/17','D204');
 insert into consultation_diagnostic values ('987654321','2019/11/17','D204');
+insert into consultation_diagnostic values ('123456789', '2019/12/17','D501');
+insert into consultation_diagnostic values ('987656789', '2019/12/17','D502');
 
 -- medication
 
@@ -347,6 +352,8 @@ insert into prescription values ('palmada','mae','123456789', '2019/11/17','D000
 insert into prescription values ('medication1','lab1','987654321', '2019/12/17','D204','4 em 4 horas','nao esquecer');
 insert into prescription values ('medication2','lab1','987656789', '2019/11/17','D204','2 em 2 horas','nao esquecer');
 insert into prescription values ('medication2','lab1','987654321','2019/11/17','D204','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication2','lab1','123456789', '2019/12/17','D501','2 em 2 horas','nao esquecer');
+insert into prescription values ('medication1','lab1','987656789', '2019/12/17','D502','2 em 2 horas','nao esquecer');
 
 
 
