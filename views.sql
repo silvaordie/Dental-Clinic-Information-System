@@ -24,10 +24,12 @@ count(distinct prescription.name) "num_medications",
 count(distinct consultation_diagnostic.ID) "num_diagnostic_codes"
 from dim_client dc, dim_date dd, dim_location_client dlc,
 procedure_in_consultation, prescription, consultation_diagnostic,
-appointment, client
+appointment, client, consultation
 where dc.VAT = appointment.VAT_client
 and dc.VAT = client.VAT
 and dlc.zip = client.zip
+and dd.date_timestamp = consultation.date_timestamp
+and consultation.VAT_doctor = appointment.VAT_doctor
 and dd.date_timestamp = appointment.date_timestamp
 and dd.date_timestamp = procedure_in_consultation.date_timestamp
 and dd.date_timestamp = prescription.date_timestamp
