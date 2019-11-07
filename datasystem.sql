@@ -162,7 +162,7 @@ create table consultation_diagnostic
    foreign key (VAT_doctor, date_timestamp)
     references consultation(VAT_doctor, date_timestamp) on update cascade on delete cascade,
    foreign key (ID)
-    references diagnostic_code(ID) on update cascade on delete cascade,
+    references diagnostic_code(ID),
    primary key (VAT_doctor, date_timestamp, ID));
 
 create table medication
@@ -498,5 +498,11 @@ insert into teeth values ('3','10','dente1');
 insert into teeth values ('5','6','dente2');
 insert into teeth values ('2','7','dente3');
 
+
+-- procedure charting
 insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','3','10','jabcw','2');
 insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','2','7','ajc','5');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','5','6','ajc','10');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','2','7','ajc','3');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','3','10','ajc','3');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','5','6','ajc','2');
