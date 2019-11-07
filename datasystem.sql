@@ -162,7 +162,7 @@ create table consultation_diagnostic
    foreign key (VAT_doctor, date_timestamp)
     references consultation(VAT_doctor, date_timestamp) on update cascade on delete cascade,
    foreign key (ID)
-    references diagnostic_code(ID),
+    references diagnostic_code(ID) on update cascade on delete cascade,
    primary key (VAT_doctor, date_timestamp, ID));
 
 create table medication

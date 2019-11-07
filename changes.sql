@@ -22,10 +22,10 @@ where name = 'Jane Sweettooth'
 
 
 
-4 - 
-update consultation_diagnostic
+4 -  
+update consultation_diagnostic natural join diagnostic_code
 set ID = 'D13'
-where ID = 'D12' and VAT_doctor in (
+where ID = 'D12' and  VAT_doctor in (
 select pc.VAT
 from  procedure_charting as pc
 where pc.name='d4 charting'
