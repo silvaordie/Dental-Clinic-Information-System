@@ -23,18 +23,14 @@ where name = 'Jane Sweettooth'
 
 
 4 -  
-update consultation_diagnostic natural join diagnostic_code
+insert into diagnostic_code values ('D13','periodontitis');
+
+update consultation_diagnostic
 set ID = 'D13'
-where ID = 'D12' and  VAT_doctor in (
-select pc.VAT
+where (VAT_doctor,date_timestamp) in (
+select pc.VAT, pc.date_timestamp
 from  procedure_charting as pc
 where pc.name='d4 charting'
 group by pc.name
 having avg(pc.measure)>4
-) and date_timestamp in (
-select pc.date_timestamp
-from  procedure_charting as pc
-where pc.name='d4 charting'
-group by pc.date_timestamp
-having avg(pc.measure)>4   
-)
+);

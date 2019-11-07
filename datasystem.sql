@@ -494,15 +494,18 @@ insert into procedure_radiology values ('arm radiography','file4', '123456789', 
 
 
 -- teeth
-insert into teeth values ('3','10','dente1');
-insert into teeth values ('5','6','dente2');
-insert into teeth values ('2','7','dente3');
+insert into teeth values ('1','1','dente1');
+insert into teeth values ('1','2','dente2');
+insert into teeth values ('1','3','dente3');
+insert into teeth values ('2','1','dente1');
+insert into teeth values ('2','2','dente2');
+insert into teeth values ('2','3','dente3');
 
 
 -- procedure charting
-insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','3','10','jabcw','2');
-insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','2','7','ajc','5');
-insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','5','6','ajc','10');
-insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','2','7','ajc','3');
-insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','3','10','ajc','3');
-insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','5','6','ajc','2');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','1','1','jabcw','2');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','1','2','ajc','5');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/11/17','1','3','ajc','10');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','2','3','ajc','3');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','1','1','ajc','3');
+insert into procedure_charting values ('d4 charting', '123456789', '2019/12/17','2','2','ajc','2');
