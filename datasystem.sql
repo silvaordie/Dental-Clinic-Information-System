@@ -104,7 +104,7 @@ create table supervision_report
    foreign key(VAT)
     references trainee_doctor(VAT) on update no action  on delete no action,
    primary key (VAT, date_timestamp)
-   );
+   )ENGINE=MyISAM;
 
 create table appointment
    (VAT_doctor char(10),
