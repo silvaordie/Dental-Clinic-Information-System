@@ -147,11 +147,11 @@ group by p2.name )
 select prescription.name , prescription.lab
 from prescription, diagnostic_code
 where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
-and diagnostic_code.description like '%dental  cavities%' and (prescription.name,prescription.lab) not in 
+and diagnostic_code.description like '%dental cavities%' and (prescription.name,prescription.lab) not in 
 (select prescription.name , prescription.lab
 from prescription, diagnostic_code
 where prescription.ID = diagnostic_code.ID and extract(year from prescription.date_timestamp)='2019'
-and diagnostic_code.description like '%infectious  disease%')
+and diagnostic_code.description like '%infectious disease%')
 group by prescription.name
 order by prescription.name;
 
