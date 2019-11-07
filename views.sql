@@ -18,9 +18,10 @@ select distinct zip, city
 from client;
 	
 create view facts_consults as
-select dc.VAT, dd.date_timestamp, dlc.zip,
-count(distinct procedure_in_consultation.name), count(distinct prescription.name),
-count(distinct consultation_diagnostic.ID)
+select dc.VAT "VAT", dd.date_timestamp "date", dlc.zip "zip",
+count(distinct procedure_in_consultation.name) "num_procedures",
+count(distinct prescription.name) "num_medications",
+count(distinct consultation_diagnostic.ID) "num_diagnostic_codes"
 from dim_client dc, dim_date dd, dim_location_client dlc,
 procedure_in_consultation, prescription, consultation_diagnostic,
 appointment, client
