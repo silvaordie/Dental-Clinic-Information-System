@@ -18,10 +18,12 @@
         exit();
         }
         $VAT = $_REQUEST['VAT'];
-
         $Name = $_REQUEST['Name'];
-        $Adress = $_REQUEST['Adress'];
-        $sql = "SELECT VAT, name FROM client WHERE client.VAT LIKE '%$VAT%' and client.name LIKE '%$Name%' and client.street LIKE '%$Adress%'";
+        $Street = $_REQUEST['Street'];
+        $City = $_REQUEST['City'];
+        $Zip = $_REQUEST['Zip'];
+
+        $sql = "SELECT VAT, name FROM client WHERE client.VAT LIKE '%$VAT%' and client.name LIKE '%$Name%' and client.street LIKE '%$Street%' and client.city LIKE '%$City%' and client.zip LIKE '%$Zip%'";
         //echo("<p>$sql</p>");
         $result = $connection->query($sql);
         $nrows = $result->rowCount();
