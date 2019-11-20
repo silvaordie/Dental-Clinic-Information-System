@@ -1,3 +1,17 @@
+drop trigger update_age;
+drop trigger check_nurse_insert;
+drop trigger check_nurse_update;
+drop trigger check_receptionist_insert;
+drop trigger check_receptionist_update;
+drop trigger check_doctor_insert;
+drop trigger check_doctor_update;
+drop trigger check_permanent_insert;
+drop trigger check_permanent_update;
+drop trigger check_phone_insert;
+drop trigger check_phone_update;
+drop function no_shows;
+drop procedure salary_raise;
+
 -- Trigger1: Done
 delimiter $$
 create trigger update_age after insert on appointment
