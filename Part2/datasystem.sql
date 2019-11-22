@@ -83,6 +83,7 @@ create table phone_number_client
 
 create table permanent_doctor
    (VAT char(10),
+   years int,
    primary key(VAT),
    foreign key(VAT)
     references doctor(VAT) on update cascade on delete cascade);
@@ -274,7 +275,7 @@ insert into phone_number_client values ('912345878','999999999');
 insert into phone_number_client values ('962345978','999999999');
 
 --		permanent_doctors 
-insert into permanent_doctor values ('123456789');
+insert into permanent_doctor values ('123456789', 11);
 
 --		trainee_doctors 
 insert into trainee_doctor values ('987654321','123456789');
