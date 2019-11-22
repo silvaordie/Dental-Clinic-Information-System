@@ -24,7 +24,6 @@
         $Zip = $_REQUEST['Zip'];
 
         $sql = "SELECT VAT, name FROM client WHERE client.VAT LIKE '%$VAT%' and client.name LIKE '%$Name%' and client.street LIKE '%$Street%' and client.city LIKE '%$City%' and client.zip LIKE '%$Zip%'";
-        //echo("<p>$sql</p>");
         $result = $connection->query($sql);
         $nrows = $result->rowCount();
         if ($nrows == 0)
@@ -39,13 +38,16 @@
             {
                 echo("<tr>");
                 echo("<td>{$row['name']}</td> <td>{$row['VAT']} </td>");
+                echo("<td> <form method='post'> <input type='submit' value = 'Add Consultation' > </form> </td>")
                 echo("</tr>");
 
             }
             echo("</table>");
         }
         $connection = null;
-        ?>
+        ?><form>
+        <input type="submit" value ='New Client'/>
+        </form>
         <form action="doctorsearch.php">
         <input type="submit" value ='back'/>
         </form>
