@@ -23,7 +23,7 @@
 
     $VAT = $_REQUEST['VAT'];
 	
-	$sql = "SELECT * FROM appointment WHERE VAT_client = '$VAT' order by date_timestamp";
+	$sql = "SELECT * FROM appointment NATURAL LEFT OUTER JOIN consultation where VAT_client = '$VAT' order by date_timestamp";
 	$result = $connection->query($sql);
 	$nrows = $result->rowCount();
 	if ($nrows == 0)
@@ -48,26 +48,20 @@
 			echo("<td><input type='submit' value='Show Details'/></td>");
 			echo("</form>");
 			echo("</tr>");
-			$sql2 = "SELECT * FROM consultation WHERE date_timestamp='$date' and VAT_doctor='$doctor'";
-			$result2 = $connection->query($sql2);
-			$nrows2 = $result2->rowCount();
-			if ($nrows2 != 0)
+			if (!empty($row['SOAP_S']) or !empty($row['SOAP_O']) or !empty($row['SOAP_A']) or !empty($row['SOAP_P']))
 			{
-				foreach($result2 as $row2)
-				{
-					echo("<tr>");
-					echo("<td>Consultation</td> <td>{$row2['date_timestamp']}</td> <td>{$row2['VAT_doctor']}</td>");
-					echo("<form action='consultation.php' method='post'>");
-					echo("<input type='hidden' name='date' value='{$date}'>");
-					echo("<input type='hidden' name='doctor' value='{$doctor}'>");
-					echo("<input type='hidden' name='soap_s' value='{$row['SOAP_S']}'>");
-					echo("<input type='hidden' name='soap_o' value='{$row['SOAP_O']}'>");
-					echo("<input type='hidden' name='soap_a' value='{$row['SOAP_A']}'>");
-					echo("<input type='hidden' name='soap_a' value='{$row['SOAP_P']}'>");
-					echo("<td><input type='submit' value='Show Details'/></td>");
-					echo("</form>");
-					echo("</tr>");
-				}
+				echo("<tr>");
+				echo("<td>Consultation</td> <td>{$row['date_timestamp']}</td> <td>{$row['VAT_doctor']}</td>");
+				echo("<form action='consultation.php' method='post'>");
+				echo("<input type='hidden' name='date' value='{$date}'>");
+				echo("<input type='hidden' name='doctor' value='{$doctor}'>");
+				echo("<input type='hidden' name='soap_s' value='{$row['SOAP_S']}'>");
+				echo("<input type='hidden' name='soap_o' value='{$row['SOAP_O']}'>");
+				echo("<input type='hidden' name='soap_a' value='{$row['SOAP_A']}'>");
+				echo("<input type='hidden' name='soap_a' value='{$row['SOAP_P']}'>");
+				echo("<td><input type='submit' value='Show Details'/></td>");
+				echo("</form>");
+				echo("</tr>");
 			}
 		}
 		echo("</table>");
