@@ -6,8 +6,8 @@
     <?php
 
     $host = "db.tecnico.ulisboa.pt";
-    $user = "ist181282";
-    $pass = "opoa7891";
+    $user = "ist425466";
+    $pass = "ojrc6899";
     $dsn = "mysql:host=$host;dbname=$user";
     try
     {
@@ -59,6 +59,7 @@
 					echo("<td>Consultation</td> <td>{$row2['date_timestamp']}</td> <td>{$row2['VAT_doctor']}</td>");
 					echo("<form action='consultation.php' method='post'>");
 					echo("<input type='hidden' name='date' value='{$date}'>");
+					echo("<input type='hidden' name='doctor' value='{$doctor}'>");
 					echo("<input type='hidden' name='soap_s' value='{$row['SOAP_S']}'>");
 					echo("<input type='hidden' name='soap_o' value='{$row['SOAP_O']}'>");
 					echo("<input type='hidden' name='soap_a' value='{$row['SOAP_A']}'>");

@@ -1,7 +1,7 @@
 <html>
 
     <body>
-    <h3>Dental Charting</h3>
+    <h3>Dental Charting  <?php echo("{$_REQUEST['date']}") ?></h3>
 
     <?php
     
@@ -51,20 +51,18 @@
 
     $description = $_REQUEST['description'];
     $measure = $_REQUEST['measure'];
-    $VAT = $_REQUEST['VAT'];
-    $date_time = $_REQUEST['date_time'];
+    $VAT = $_REQUEST['doctor'];
+    $date_time = $_REQUEST['date'];
     $name = $_REQUEST['name'];
     $number = $_REQUEST['number'];
     $quadrant = $_REQUEST['quadrant'];
- /* 
+  
     if(!empty($measure))
-    {´
+    {
         $sql = "insert into procedure_charting values ('$name', '$VAT', '$date_time','$quadrant','$number','$description','$measure')";
         $result = $connection->query($sql);
-
     } 
- */
-
+ 
     ?>
 
 
