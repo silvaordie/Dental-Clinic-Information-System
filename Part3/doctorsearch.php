@@ -50,6 +50,10 @@
                     echo("<tr><form action='newAppointment.php' method='post'>");
                     echo("<td>{$row['name']}</td> <td><input type='hidden' name='VAT' value='{$row['VAT']}'>{$row['VAT']} </td>");
                     echo("<td>  <input type='submit' value='Add Appointment'/>  </td>");
+                    echo("</form>");
+					echo("<form action='listAppointments.php' method='post'>");
+                    echo("<td><input type='hidden' name='VAT' value='{$row['VAT']}'></td>");
+                    echo("<td><input type='submit' value='List Appointements/Consultations'/></td>");
                     echo("</form> </tr>");
 
                 }
