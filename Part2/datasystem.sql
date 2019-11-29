@@ -99,7 +99,7 @@ create table trainee_doctor
 
 create table supervision_report
    (VAT char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    description varchar(255),
    evaluation int CHECK (evaluation <=5 AND evaluation >= 5),
    foreign key(VAT)
@@ -109,7 +109,7 @@ create table supervision_report
 
 create table appointment
    (VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    description varchar(255),
    VAT_client char(10),
    foreign key(VAT_doctor)
@@ -120,25 +120,25 @@ create table appointment
 
 create table consultation
    (VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    SOAP_S varchar(255),
    SOAP_O varchar(255),
    SOAP_A varchar(255),
    SOAP_P varchar(255),
    foreign key(VAT_doctor,date_timestamp)
-    references appointment(VAT_doctor, date_timestamp) on update cascade on delete no action,
+    references appointment(VAT_doctor, date_timestamp) on update cascade on delete cascade,
    primary key (VAT_doctor, date_timestamp)
    );
 
 create table consultation_assistant
    (VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    VAT_nurse char(10),
    foreign key(VAT_doctor,date_timestamp)
-    references appointment(VAT_doctor, date_timestamp) on update cascade on delete no action,
+    references appointment(VAT_doctor, date_timestamp) on update cascade on delete cascade,
    foreign key (VAT_nurse)
     references nurse(VAT) on update cascade on delete no action,
-   primary key (VAT_doctor, date_timestamp));
+   primary key (VAT_doctor, date_timestamp, VAT_nurse));
 
 create table diagnostic_code
    (ID varchar(255),
@@ -158,7 +158,7 @@ create table diagnostic_code_relation
 
 create table consultation_diagnostic
    (VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    ID varchar(255),
    foreign key (VAT_doctor, date_timestamp)
     references consultation(VAT_doctor, date_timestamp) on update cascade on delete cascade,
@@ -175,7 +175,7 @@ create table prescription
    (name varchar(255),
    lab varchar(255),
    VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    ID varchar(255),
    dosage varchar(255),
    description varchar(255),
@@ -193,7 +193,7 @@ create table _procedure
 create table procedure_in_consultation
    (name varchar(255),
    VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    description varchar(255),
    foreign key (VAT_doctor,date_timestamp)
     references consultation(VAT_doctor, date_timestamp) on update cascade on delete cascade,
@@ -206,7 +206,7 @@ create table procedure_radiology
    (name varchar(255),
    file varchar(255),
    VAT_doctor char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    primary key (file, name, VAT_doctor, date_timestamp),
    foreign key (VAT_doctor,date_timestamp)
     references consultation_diagnostic(VAT_doctor,date_timestamp) on update cascade on delete cascade,
@@ -222,7 +222,7 @@ create table teeth
 create table procedure_charting
    (name varchar(255),
    VAT char(10),
-   date_timestamp timestamp,
+   date_timestamp datetime,
    quadrant char(2),
    number char(3),
    description varchar(255),
@@ -243,6 +243,7 @@ insert into employee values ('123746789', 'Jane Dentedoce', '1980/12/17', 'rua2'
 insert into employee values ('987656789', 'Julio Isidro', '1200/12/17', 'rua', 'cidade2', '2780-485', 'PT50123491234567891234666', 666.80);
 insert into employee values ('123458889', 'João Baião', '1805/12/17', 'rua7', 'cidade3', '2780-777', 'PT50567891234567895432167', 9600);
 insert into employee values ('123457469', 'Sara Rececao', '1254/12/17', 'rua6', 'cidade74', '2740-777', 'PT50566891274567805432167', 100);
+insert into employee values ('154235485', 'Enfermeira Joana', '2000/5/17', 'rua dos jovens', 'cidade natal', '2300-112', 'PT50566891274567815432167', 350.22);
 
     --	phone_number_employee
 insert into phone_number_employee values ('912345678','123456789');
@@ -263,6 +264,7 @@ insert into doctor values ('987656789', 'Expert em piropos', 'Trabalha pouco fal
 
 --    nurses
 insert into nurse values ('123746789');
+insert into nurse values ('154235485');
 
 --		clients 
 insert into client values ('999999999', 'José Bebé', '1990/12/17', 'rua3', 'cidade1', '2780-255', 'M' , 26);
