@@ -25,6 +25,7 @@
         $Zip = $_REQUEST['Zip'];
         $gender  = $_REQUEST['gender'];
         $birthday = $_REQUEST['birth_date'];
+        $num_phones  =$_REQUEST['num_phones'];
 
         $date = new DateTime($birthday);
         $now = new DateTime();
@@ -33,9 +34,22 @@
 
         $sql = "insert into client values ('$VAT', '$Name', '$birthday', '$Street', '$City', '$Zip', '$gender' , '$age')";
 
-        $result = $connection->query($sql);
+        $result = $connection->exec($sql);
+        echo("<p>$sql</p>");
+        echo("<p>New Client assigned: $result </p>");
 
-        header("Location: doctorsearch.php");
+        echo("<form action=phones.php method='post'>");
+        echo("<input type=hidden value=$VAT name =VAT>");
+        echo("<input type=hidden value=$$num_phones name =num_phones>");
+
+        for($i=1;$i<=$num_phones;$i++)
+        {
+            echo("<p>Phone Number: <input type='text' name='phone[$i]'></p>");
+        }
+        echo("</form");
+
+        $connection = null;
+
     ?>
     </body>
 </html>
