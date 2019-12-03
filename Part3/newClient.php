@@ -1,7 +1,6 @@
 <html>
     <body>
     <?php
-
         $host = "db.tecnico.ulisboa.pt";
         $user = "ist425466";
         $pass = "ojrc6899";
@@ -25,28 +24,33 @@
         $Zip = $_REQUEST['Zip'];
         $gender  = $_REQUEST['gender'];
         $birthday = $_REQUEST['birth_date'];
-        $num_phones  =$_REQUEST['num_phones'];
+        $phone  =$_REQUEST['phone'];
 
         $date = new DateTime($birthday);
         $now = new DateTime();
         $interval = $now->diff($date);
         $age = $interval->y;
 
-        $sql = "insert into client values ('$VAT', '$Name', '$birthday', '$Street', '$City', '$Zip', '$gender' , '$age')";
+        if(!empty($Name)){
+            $sql = "insert into client values ('$VAT', '$Name', '$birthday', '$Street', '$City', '$Zip', '$gender' , '$age')";
 
-        $result = $connection->exec($sql);
-        echo("<p>$sql</p>");
-        echo("<p>New Client assigned: $result </p>");
-
-        echo("<form action=phones.php method='post'>");
-        echo("<input type=hidden value=$VAT name =VAT>");
-        echo("<input type=hidden value=$$num_phones name =num_phones>");
-
-        for($i=1;$i<=$num_phones;$i++)
-        {
-            echo("<p>Phone Number: <input type='text' name='phone[$i]'></p>");
+            $result = $connection->exec($sql);
+            echo("<p>$sql</p>");
+            echo("<p>New Client assigned: $result </p>");
         }
+        
+
+        echo("<form action=newClient.php method='post'>");
+        echo("<input type=hidden value=$VAT name =VAT>");
+        echo("<p>Phone Number: <input type='text' name='phone'></p>");
+        echo("<p><input type='submit' value='Add'></p>");
         echo("</form");
+        if(!empty($phone)){
+            $sql = "insert into phone_number_client values('$phone','$VAT')";
+            $result = $connection->exec($sql);
+            echo("<p>$sql</p>");
+            echo("<p>New phone number: $result </p>");
+        }
 
         $connection = null;
 
