@@ -7,8 +7,12 @@ drop trigger check_doctor_insert;
 drop trigger check_doctor_update;
 drop trigger check_permanent_insert;
 drop trigger check_permanent_update;
+drop trigger check_trainee_insert;
+drop trigger check_trainee_update;
 drop trigger check_phone_insert;
 drop trigger check_phone_update;
+drop trigger check_phone_insert_client;
+drop trigger check_phone_update_client;
 drop function no_shows;
 drop procedure salary_raise;
 
@@ -156,7 +160,11 @@ for each row
 begin
 	if exists(select phone
 	from phone_number_employee where phone = new.phone) then
-	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists';
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
+	end if;
+	if exists(select phone
+	from phone_number_client where phone = new.phone) then
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
 	end if;
 end $$
 delimiter ;
@@ -167,7 +175,41 @@ for each row
 begin
 	if exists(select phone
 	from phone_number_employee where phone = new.phone) then
-	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists';
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
+	end if;
+	if exists(select phone
+	from phone_number_client where phone = new.phone) then
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
+	end if;
+end $$
+delimiter ;
+-- on insert phone
+delimiter $$
+create trigger check_phone_insert_client before insert on phone_number_client
+for each row
+begin
+	if exists(select phone
+	from phone_number_employee where phone = new.phone) then
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
+	end if;
+	if exists(select phone
+	from phone_number_client where phone = new.phone) then
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
+	end if;
+end $$
+delimiter ;
+-- on update phone
+delimiter $$
+create trigger check_phone_update_client before update on phone_number_client
+for each row
+begin
+	if exists(select phone
+	from phone_number_employee where phone = new.phone) then
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
+	end if;
+	if exists(select phone
+	from phone_number_client where phone = new.phone) then
+	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
 	end if;
 end $$
 delimiter ;
