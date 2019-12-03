@@ -159,11 +159,11 @@ create trigger check_phone_insert before insert on phone_number_employee
 for each row
 begin
 	if exists(select phone
-	from phone_number_employee where phone = new.phone) then
+	from phone_number_employee where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
 	end if;
 	if exists(select phone
-	from phone_number_client where phone = new.phone) then
+	from phone_number_client where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
 	end if;
 end $$
@@ -174,11 +174,11 @@ create trigger check_phone_update before update on phone_number_employee
 for each row
 begin
 	if exists(select phone
-	from phone_number_employee where phone = new.phone) then
+	from phone_number_employee where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
 	end if;
 	if exists(select phone
-	from phone_number_client where phone = new.phone) then
+	from phone_number_client where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
 	end if;
 end $$
@@ -189,11 +189,11 @@ create trigger check_phone_insert_client before insert on phone_number_client
 for each row
 begin
 	if exists(select phone
-	from phone_number_employee where phone = new.phone) then
+	from phone_number_employee where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
 	end if;
 	if exists(select phone
-	from phone_number_client where phone = new.phone) then
+	from phone_number_client where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
 	end if;
 end $$
@@ -204,11 +204,11 @@ create trigger check_phone_update_client before update on phone_number_client
 for each row
 begin
 	if exists(select phone
-	from phone_number_employee where phone = new.phone) then
+	from phone_number_employee where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a employee';
 	end if;
 	if exists(select phone
-	from phone_number_client where phone = new.phone) then
+	from phone_number_client where phone = new.phone and VAT != new.VAT) then
 	signal sqlstate '45000' set MESSAGE_TEXT = 'This phone number already exists, belongs to a client';
 	end if;
 end $$
