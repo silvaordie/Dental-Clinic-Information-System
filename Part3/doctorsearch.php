@@ -71,7 +71,6 @@
                     <input type="radio" name="gender" value="F"> Female  
                     <input type="radio" name="gender" value="O"> Other</p>
             <p>Address: Street: <input type="text" name="Street"/> City: <input type="text" name="City"/> Zip: <input type="text" name="Zip"/></p>
-
             
             
             <input type="submit" value ='Add Client'/>

@@ -69,9 +69,14 @@
 
     $description = $_REQUEST['description'];
     $measure = $_REQUEST['measure'];
+    $desc = 'default';
   
+    $sql = "insert into procedure_in_consultation values('$name','$doctor','$date','$desc ')";
+    $connection->exec($sql);
+
+
     $connection->beginTransaction();
- 
+    
     for($i=1;$i<=2;$i++){
         for($j=1;$j<=3;$j++){
             if(!empty($measure[$i][$j])){
