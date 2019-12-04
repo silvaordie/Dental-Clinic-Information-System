@@ -44,33 +44,76 @@
 	$result3 = $connection->query($sql3);
 	$nrows3 = $result3->rowCount();
 	
+	//Get diagnostic codes already assigned to this consultation
+	$sql6 = "SELECT ID FROM consultation_diagnostic WHERE VAT_doctor = '$doctor' and date_timestamp = '$date'";
+	$result_consult_diagnostic = $connection->query($sql6);
+	$nrows_consult_diagnostic = $result_consult_diagnostic->rowCount();
+	
+	// Get diagnostic codes
+	$sql4 = "SELECT ID FROM diagnostic_code WHERE ID NOT IN ($sql6)";
+	$result_diagcodes = $connection->query($sql4);
+	$nrows_diagcodes = $result_diagcodes->rowCount();
+
+	// Get medication
+	$sql5 = "SELECT * FROM medication";
+	$result_medication = $connection->query($sql5);
+	$nrows_medication = $result_medication->rowCount();
+	foreach($result_medication as $meds)
+	{
+		$med_array[] = array("name" => $meds['name'], "lab" => $meds['lab']);
+	}	
+		
 	echo("<table>");
 	echo("<tr><td>VAT_DOCTOR:</td> <td>{$doctor}</td></tr>");
 	echo("<tr><td>DATE_TIMESTAMP:</td> <td>{$date}</td></tr>");
 	
 	// if the consultation were not yet created
 	if ($nrows == 0)
-	{
+	{	
 		echo("<form action='addConsultation.php' method='post'>");
-			echo("<input type='hidden' name='doctor' value='{$doctor}'>");
-			echo("<input type='hidden' name='date' value='{$date}'>");
-			echo("<tr><td>SOAP_S:</td> <td><input type='text' name='SOAP_S'/></td></tr>");
-			echo("<tr><td>SOAP_O:</td> <td><input type='text' name='SOAP_O'/></td></tr>");
-			echo("<tr><td>SOAP_A:</td> <td><input type='text' name='SOAP_A'/></td></tr>");
-			echo("<tr><td>SOAP_P:</td> <td><input type='text' name='SOAP_P'/></td></tr>");
-			// if there are nurses available
-			if ($nrows3 != 0)
+		echo("<input type='hidden' name='doctor' value='{$doctor}'>");
+		echo("<input type='hidden' name='date' value='{$date}'>");
+		echo("<tr><td>SOAP_S:</td> <td><input type='text' name='SOAP_S'/></td></tr>");
+		echo("<tr><td>SOAP_O:</td> <td><input type='text' name='SOAP_O'/></td></tr>");
+		echo("<tr><td>SOAP_A:</td> <td><input type='text' name='SOAP_A'/></td></tr>");
+		echo("<tr><td>SOAP_P:</td> <td><input type='text' name='SOAP_P'/></td></tr>");
+		// if there are nurses available
+		if ($nrows3 != 0)
+		{
+			foreach($result3 as $row3)
 			{
-				foreach($result3 as $row3)
+				echo("<tr><td>Assistant Nurses: </td> <td><input type='checkbox' name='nurse_list[]' value='{$row3['VAT']}'><label>{$row3['name']} {$row3['VAT']}</label></td></tr>");
+			}
+		}
+		else
+		{
+			echo("<tr><td>ATTENTION: </td><td>No nurse/assistant available for this consultation</td></tr>");
+		}
+		foreach($result_diagcodes as $diagnostic)
+		{
+			// check list of diagnostic codes
+			$id = $diagnostic['ID'];
+			echo("<tr><td>Diagnostic Code: </td> <td><input type='checkbox' name='codes[]' value='{$diagnostic['ID']}'><label>{$diagnostic['ID']}</label></td>");
+			// check list of medication per diagnostic
+			if ($nrows_medication != 0)
+			{
+				echo("<td>Associated Prescriptions: </td></tr>");
+				foreach($med_array as $med)
 				{
-					echo("<tr><td>Assistant Nurses: </td> <td><input type='checkbox' name='nurse_list[]' value='{$row3['VAT']}'><label>{$row3['name']} {$row3['VAT']}</label></td></tr>");
+					$med_name = $med['name'];
+					$med_lab = $med['lab'];
+					$value = serialize($med);
+					echo("<tr><td></td><td></td><td></td> <td><input type='checkbox' name='meds_id[$id][]' value='$value'><label>{$med_name} {$med_lab}</label></td>");
+					echo("<td></td><td>Dosage:</td> <td><input type='text' name='dosage[$id][$med_name][$med_lab]'/></td>");
+					echo("<td>Description:</td> <td><input type='text' name='description[$id][$med_name][$med_lab]'/></td></tr>");
 				}
 			}
 			else
 			{
-				echo("<tr><td>ATTENTION: </td><td>No nurse/assistant available for this consultation</td></tr>");
+				echo("<td>No Medication on the DataBase</td></tr>");
 			}
-			echo("<tr><td><input type='submit' value ='Submit Information'/></td></tr>");
+		}
+		echo("<tr><td><input type='submit' value ='Submit Information'/></td></tr>");
 		echo("</form></table>");
 	}
 	else
@@ -103,6 +146,74 @@
 				elseif ($nrows2 == 0 and $nrows3 == 0)
 				{
 					echo("<tr><td>ATTENTION: </td><td>No nurse/assistant available for this consultation</td></tr>");
+				}
+				// already created diagnosis
+				if($nrows_consult_diagnostic != 0)
+				{
+					foreach($result_consult_diagnostic as $diagnostic)
+					{
+						// check list of diagnostic codes
+						$id = $diagnostic['ID'];
+						echo("<input type='hidden' name='preassigned_codes[]' value='{$diagnostic['ID']}'>");
+						echo("<tr><td>Diagnostic Code: </td> <td><input type='checkbox' name='assigned_codes[]' value='{$diagnostic['ID']}' checked><label>{$diagnostic['ID']}</label></td>");
+						echo("<td>Associated Prescriptions: </td></tr>");
+						// find medication already prescribed
+						$sql = "SELECT * FROM prescription WHERE VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$id'";
+						$result_medication2 = $connection->query($sql);
+						$nrows_medication2 = $result_medication2->rowCount();
+						if($nrows_medication2 != 0)
+						{
+							foreach($result_medication2 as $med)
+							{
+								$med_name = $med['name'];
+								$med_lab = $med['lab'];
+								$prevalue = array("name" => $med['name'], "lab" => $med['lab']);
+								$value = serialize($prevalue);
+								echo("<input type='hidden' name='meds_id_preassigned[$id][]' value='$value'>");
+								echo("<tr><td></td><td></td><td></td> <td><input type='checkbox' name='meds_id_assigned[$id][]' value='$value' checked><label>{$med_name} {$med_lab}</label></td>");
+								echo("<td></td><td>Dosage:</td> <td><input type='text' name='dosage[$id][$med_name][$med_lab]' value='{$med['dosage']}'/></td>");
+								echo("<td>Description:</td> <td><input type='text' name='description[$id][$med_name][$med_lab]' value='{$med['description']}'/></td></tr>");
+							}
+						}
+						// find medication not prescribed
+						$sql = "SELECT * FROM medication WHERE (name,lab) NOT IN (SELECT name, lab FROM prescription WHERE VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$id')";
+						$result_medication2 = $connection->query($sql);
+						$nrows_medication2 = $result_medication2->rowCount();
+						if($nrows_medication2 != 0)
+						{
+							foreach($result_medication2 as $med)
+							{
+								$med_name = $med['name'];
+								$med_lab = $med['lab'];
+								$prevalue = array("name" => $med['name'], "lab" => $med['lab']);
+								$value = serialize($prevalue);
+								echo("<tr><td></td><td></td><td></td> <td><input type='checkbox' name='meds_id[$id][]' value='$value'><label>{$med_name} {$med_lab}</label></td>");
+								echo("<td></td><td>Dosage:</td> <td><input type='text' name='dosage[$id][$med_name][$med_lab]'/></td>");
+								echo("<td>Description:</td> <td><input type='text' name='description[$id][$med_name][$med_lab]'/></td></tr>");
+							}
+						}
+					}
+				}
+				// not yet created diagnosis
+				foreach($result_diagcodes as $diagnostic)
+				{
+					// check list of diagnostic codes
+					$id = $diagnostic['ID'];
+					echo("<tr><td>Diagnostic Code: </td> <td><input type='checkbox' name='codes[]' value='{$diagnostic['ID']}'><label>{$diagnostic['ID']}</label></td>");
+					// check list of medication per diagnostic
+					if ($nrows_medication != 0)
+					{
+						echo("<td>Associated Prescriptions: </td></tr>");
+						foreach($med_array as $med)
+						{
+							$med_name = $med['name'];
+							$med_lab = $med['lab'];
+							$value = serialize($med);
+							echo("<tr><td></td><td></td><td></td> <td><input type='checkbox' name='meds_id[$id][]' value='$value'><label>{$med_name} {$med_lab}</label></td>");
+							echo("<td></td><td>Dosage:</td> <td><input type='text' name='dosage[$id][$med_name][$med_lab]'/></td>");
+							echo("<td>Description:</td> <td><input type='text' name='description[$id][$med_name][$med_lab]'/></td></tr>");
+						}
+					}
 				}
 				echo("<tr><td><input type='submit' value ='Submit Information'/></td></tr>");
 			echo("</form></table>");

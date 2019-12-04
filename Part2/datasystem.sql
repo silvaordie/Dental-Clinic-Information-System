@@ -183,7 +183,7 @@ create table prescription
     references consultation_diagnostic(VAT_doctor, date_timestamp,ID) on update cascade on delete cascade,
    foreign key (name,lab)
     references medication(name,lab) on update cascade on delete cascade,
-   primary key (name, VAT_doctor, date_timestamp, ID));
+   primary key (name, lab, VAT_doctor, date_timestamp, ID));
 
 create table _procedure
    (name varchar(255),
