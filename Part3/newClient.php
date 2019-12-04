@@ -31,12 +31,19 @@
         $interval = $now->diff($date);
         $age = $interval->y;
 
-        if(!empty($Name)){
+        if(!empty($VAT)&&!empty($Name)&&!empty($Street)&&!empty($City)&&!empty($Zip)&&!empty($gender)&&!empty($age)){
             $sql = "insert into client values ('$VAT', '$Name', '$birthday', '$Street', '$City', '$Zip', '$gender' , '$age')";
 
             $result = $connection->exec($sql);
-            echo("<p>$sql</p>");
-            echo("<p>New Client assigned: $result </p>");
+            if ($result == FALSE){
+                $info = $connection->errorInfo();
+                echo("<p>Error: {$info[2]}</p>");
+            }
+            else
+            {
+                echo("<p>$sql</p>");
+                echo("<p>New Client assigned</p>");
+            }
         }
         
 
@@ -48,8 +55,18 @@
         if(!empty($phone)){
             $sql = "insert into phone_number_client values('$phone','$VAT')";
             $result = $connection->exec($sql);
-            echo("<p>$sql</p>");
-            echo("<p>New phone number: $result </p>");
+
+            if ($result == FALSE){
+                $info = $connection->errorInfo();
+                echo("<p>Error: {$info[2]}</p>");
+            }
+            else
+            {
+                echo("<p>$sql</p>");
+                echo("<p>New phone number inserted </p>");
+            }
+
+
         }
 
         $connection = null;

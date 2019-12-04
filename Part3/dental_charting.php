@@ -81,7 +81,19 @@
         for($j=1;$j<=3;$j++){
             if(!empty($measure[$i][$j])){
                 $sql = "insert into procedure_charting values ('$name', '$doctor', '$date','$i','$j','{$description[$i][$j]}','{$measure[$i][$j]}')";
-                $connection->exec($sql); 
+                $result = $connection->exec($sql); 
+
+                if ($result == FALSE){
+                    $info = $connection->errorInfo();
+                    echo("<p>Error: {$info[2]}</p>");
+                }
+                else
+                {
+                    echo("<p>$sql</p>");
+                    echo("<p>New measure</p>");
+                }
+
+
             }
         }
     } 
