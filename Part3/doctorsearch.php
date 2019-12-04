@@ -33,11 +33,16 @@
         $City = $_REQUEST['City'];
         $Zip = $_REQUEST['Zip'];
         if(!empty($VAT)||!empty($Name)||!empty($Street)||!empty($City)||!empty($Zip))
-        {
-            $sql = "SELECT VAT, name FROM client WHERE client.VAT LIKE '%$VAT%' and client.name LIKE '%$Name%' and client.street LIKE '%$Street%' and client.city LIKE '%$City%' and client.zip LIKE '%$Zip%'";
-            $result = $connection->query($sql);
-            $nrows = $result->rowCount();
-            if ($nrows == 0)
+        {   
+            $sVAT = "%{$_REQUEST['VAT']}%";
+            $sName = "%{$_REQUEST['Name']}%";
+            $sStreet = "%{$_REQUEST['Street']}%";
+            $sCity = "%{$_REQUEST['City']}%";
+            $sZip = "%{$_REQUEST['Zip']}%";
+            $result = $connection->prepare("SELECT VAT, name FROM client WHERE client.VAT LIKE ? and client.name LIKE ? and client.street LIKE ? and client.city LIKE ? and client.zip LIKE ?");
+            $result->execute(array($sVAT, $sName, $sStreet, $sCity, $sZip));
+
+            if ($result->rowCount() == 0)
             {
             echo("<p>There is no client with such info.</p>");
             }
@@ -45,7 +50,7 @@
             {   
                 echo("<table>");
                 echo("<tr> <th>Name</th> <th>VAT</th> <th></th> </tr>");
-                foreach($result as $row)
+                foreach($result->fetchAll(PDO::FETCH_ASSOC) as $row)
                 {
                     echo("<tr><form action='newAppointment.php' method='post'>");
                     echo("<td>{$row['name']}</td> <td><input type='hidden' name='VAT' value='{$row['VAT']}'>{$row['VAT']} </td>");
@@ -101,10 +106,11 @@
         if(!empty($_REQUEST['app_date'])&&!empty($_REQUEST['app_time']))
         {
             echo("<h3>Available Doctors $app_timestamp</h3>");
-            $sql = "SELECT doc.name, doc.VAT from employee doc, doctor where doc.VAT = doctor.VAT and doc.VAT not in( select app.VAT_doctor from appointment app where app.VAT_doctor and app.date_timestamp BETWEEN '$app_timestamp' AND '$app_timestamp2') group by doc.VAT";
-            $result = $connection->query($sql);
-            $nrows = $result->rowCount();
-            if ($nrows == 0)
+
+            $result = $connection->prepare("SELECT doc.name, doc.VAT from employee doc, doctor where doc.VAT = doctor.VAT and doc.VAT not in( select app.VAT_doctor from appointment app where app.VAT_doctor and app.date_timestamp BETWEEN ? AND ? ) group by doc.VAT");
+            $result->execute(array($app_timestamp, $app_timestamp2));
+
+            if ($result->rowCount() == 0)
             {
             echo("<p>There is no doctor available.</p>");
             }
@@ -112,7 +118,7 @@
             {   
                 echo("<table>");
                 echo("<tr> <th>Name</th> <th>VAT</th></tr>");
-                foreach($result as $row)
+                foreach($result->fetchAll(PDO::FETCH_ASSOC) as $row)
                 {
                     echo("<tr>");
                     echo("<td>{$row['name']}</td> <td>{$row['VAT']} </td>");

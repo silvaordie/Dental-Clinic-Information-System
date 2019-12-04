@@ -31,17 +31,17 @@
         $interval = $now->diff($date);
         $age = $interval->y;
 
-        if(!empty($VAT)&&!empty($Name)&&!empty($Street)&&!empty($City)&&!empty($Zip)&&!empty($gender)&&!empty($age)){
-            $sql = "insert into client values ('$VAT', '$Name', '$birthday', '$Street', '$City', '$Zip', '$gender' , '$age')";
+        if(!empty($VAT)&&!empty($Name)&&!empty($Street)&&!empty($City)&&!empty($Zip)&&!empty($gender)&&!empty($birthday)){
+            
+            $result = $connection->prepare("insert into client values (?, ?, ?, ?, ?, ?, ? , ?)");
+            $result->execute(array($VAT, $Name,$birthday, $Street, $City, $Zip,$gender,$age));
 
-            $result = $connection->exec($sql);
-            if ($result == FALSE){
-                $info = $connection->errorInfo();
-                echo("<p>Error: {$info[2]}</p>");
+            $error = $result->errorInfo();
+            if ($error[1] != ''){
+                echo("<p>Error: {$error[2]}</p>");
             }
             else
             {
-                echo("<p>$sql</p>");
                 echo("<p>New Client assigned</p>");
             }
         }
@@ -53,16 +53,15 @@
         echo("<p><input type='submit' value='Add'></p>");
         echo("</form");
         if(!empty($phone)){
-            $sql = "insert into phone_number_client values('$phone','$VAT')";
-            $result = $connection->exec($sql);
+            $result = $connection->prepare("insert into phone_number_client values(?,?)");
+            $result->execute(array($phone,$VAT));
 
-            if ($result == FALSE){
-                $info = $connection->errorInfo();
-                echo("<p>Error: {$info[2]}</p>");
+            $error = $result->errorInfo();
+            if ($error[1] != ''){
+                echo("<p>Error: {$error[2]}</p>");
             }
             else
             {
-                echo("<p>$sql</p>");
                 echo("<p>New phone number inserted </p>");
             }
 
