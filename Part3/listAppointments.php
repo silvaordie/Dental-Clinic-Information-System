@@ -49,7 +49,7 @@
 			echo("<td><input type='submit' value='Show Details'/></td>");
 			echo("</form>");
 			echo("</tr>");
-			if (!empty($row['SOAP_S']) or !empty($row['SOAP_O']) or !empty($row['SOAP_A']) or !empty($row['SOAP_P']))
+			if (!is_null($row['SOAP_S']) or !is_null($row['SOAP_O']) or !is_null($row['SOAP_A']) or !is_null($row['SOAP_P']))
 			{
 				echo("<tr>");
 				echo("<td>Consultation</td> <td>{$row['date_timestamp']}</td> <td>{$row['VAT_doctor']}</td>");
