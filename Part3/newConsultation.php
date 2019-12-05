@@ -200,7 +200,7 @@
 							}
 						}
 						// find medication not prescribed
-						$result_medication2 = $connection->prepare("SELECT * FROM medication WHERE (name,lab) NOT IN (SELECT name, lab FROM prescription WHERE VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+						$result_medication2 = $connection->prepare("SELECT * FROM medication WHERE (name,lab) NOT IN (SELECT name, lab FROM prescription WHERE VAT_doctor = ? AND date_timestamp = ? AND ID = ?)");
 						$result_medication2->execute(array($doctor,$date,$id));
 						$error7 = $result_medication2->errorInfo();
 						if ($error7[1] != ''){
