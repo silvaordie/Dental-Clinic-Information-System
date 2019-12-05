@@ -87,14 +87,21 @@
                 if(!empty($measure[$i][$j])){
 
                     $result = $connection->prepare("insert into procedure_charting values (?, ?, ?,?,?,?,?)");
-                    $result->execute(array($name, $doctor, $date,$i,$j,$description[$i][$j],$measure[$i][$j]));
-                    $error = $result->errorInfo();
-                    if ($error[1] != ''){
-                        echo("<p>Error: {$error[2]}</p>");
-                    }
-                    else{
+                    $result2 = $connection->prepare("UPDATE procedure_charting SET description = ?, measure = ? WHERE name = ? and VAT = ? and date_timestamp = ? and quadrant=? and number = ?");
+                   
+                    if($result->execute(array($name, $doctor, $date,$i,$j,$description[$i][$j],$measure[$i][$j]))){
                         echo("<p>New measure added</p>");
                     }
+                    else if ($result2->execute(array($description[$i][$j],$measure[$i][$j],$name, $doctor, $date,$i,$j))){
+                        echo("<p>New measure updated</p>");
+                        
+                        }
+                        else{
+                            $error = $result->errorInfo();
+                            if ($error[1] != ''){
+                                echo("<p>Error: {$error[2]}</p>");
+                            }
+                        }                    
                 }
             }
         } 

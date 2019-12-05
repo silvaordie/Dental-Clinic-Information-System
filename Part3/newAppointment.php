@@ -29,7 +29,7 @@
     ?>
             
             <p>Date:  <input type="date" name="app_date"> </p>
-            <p>Time:  <input type="time" name="app_time"> </p>
+            <p>Time:  <input type="number" name="app_time" min="9" max="16"> </p>
             <p>Description: <input type='text' name='description'> </p>
             <p>Vat Doctor: <input type='text' name='VAT_doctor'> </p>
             <input type ='submit' value= 'New Appoitment'/>
@@ -37,7 +37,7 @@
 
     <?
     $VAT_client=$_REQUEST['VAT_client'];
-    $app_timestamp = $_REQUEST['app_date'].' '.$_REQUEST['app_time'].':00';
+    $app_timestamp = $_REQUEST['app_date'].' '.$_REQUEST['app_time'].':00:00';
     $description = $_REQUEST['description'];
     $VAT_doctor = $_REQUEST['VAT_doctor'];
 
@@ -60,23 +60,23 @@
 
     <form action="newAppointment.php" method="post">
             <h3>List Availabe Doctor</h3>
-            <p>Date:  <input type="date" name="app_date"> </p>
-            <p>Time (h):  <input type="number" name="app_time" min="9" max="16"> </p>
+            <p>Date:  <input type="date" name="app_date_"> </p>
+            <p>Time (h):  <input type="number" name="app_time_" min="9" max="16"> </p>
             <input type ='submit' value= 'List doctors'/>
         </form>
 
 
         <?php
 
-        $app_timestamp = $_REQUEST['app_date'].' '.$_REQUEST['app_time'].':00';
+        $app_timestamp = $_REQUEST['app_date_'].' '.$_REQUEST['app_time_'].':00';
 
-        $time1 = $_REQUEST['app_time'].':00';
+        $time1 = $_REQUEST['app_time_'].':00';
         $time2 = "01:00";
         
         $time2 = date("H:i",strtotime($time1)+strtotime($time2));
 
-        $app_timestamp2 = $_REQUEST['app_date'].' '.$time2; 
-        if(!empty($_REQUEST['app_date'])&&!empty($_REQUEST['app_time']))
+        $app_timestamp2 = $_REQUEST['app_date_'].' '.$time2; 
+        if(!empty($_REQUEST['app_date_'])&&!empty($_REQUEST['app_time_']))
         {
             echo("<h3>Available Doctors $app_timestamp</h3>");
 
