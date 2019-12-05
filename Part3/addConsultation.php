@@ -25,22 +25,37 @@
     $s = $_REQUEST['SOAP_S'];
     $o = $_REQUEST['SOAP_O'];
     $a = $_REQUEST['SOAP_A'];
-    $p = $_REQUEST['SOAP_P'];
+	$p = $_REQUEST['SOAP_P'];
 	
-	$sql = "INSERT INTO consultation VALUES ('$doctor', '$date', '$s', '$o', '$a', '$p')";
-	echo("<p>$sql</p>");
-	$nrows = $connection->exec($sql);
-	echo("<p>Consultations Created: $nrows</p>");
 
-	
+	$result = $connection->prepare("INSERT INTO consultation VALUES (?, ?, ?, ?, ?, ?)");
+	$result->execute(array($doctor,$date,$s,$o,$a,$p));
+
+	$error = $result->errorInfo();
+	if ($error[1] != ''){
+		echo("<p>Error: {$error[2]}</p>");
+	}
+	else
+	{
+		echo("<p>Consultation Created</p>");
+	}
+
+
 	if(!empty($_REQUEST['nurse_list']))
 	{
 		foreach($_REQUEST['nurse_list'] as $nurse)
-		{
-			$sql = "INSERT INTO consultation_assistant VALUES ('$doctor', '$date', '$nurse')";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>Nurses/Assistants Assigned: $nrows</p>");
+		{	
+			$result = $connection->prepare("INSERT INTO consultation_assistant VALUES (?, ?, ?)");
+            $result->execute(array($doctor,$date,$nurse));
+
+            $error = $result->errorInfo();
+            if ($error[1] != ''){
+                echo("<p>Error: {$error[2]}</p>");
+			}
+			else
+			{
+				echo("<p>Nurses/Assistants Assigned</p>");
+			}
 		}
 	}
 	
@@ -48,10 +63,19 @@
 	{
 		foreach($_REQUEST['codes'] as $code)
 		{
-			$sql = "INSERT INTO consultation_diagnostic VALUES ('$doctor', '$date', '$code')";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>Diagnosis Created: $nrows</p>");
+
+			$result = $connection->prepare("INSERT INTO consultation_diagnostic VALUES (?, ?, ?)");
+            $result->execute(array($doctor,$date,$code));
+
+            $error = $result->errorInfo();
+            if ($error[1] != ''){
+                echo("<p>Error: {$error[2]}</p>");
+			}
+			else
+			{
+				echo("<p>Diagnosis Created</p>");
+			}
+
 			//insert medication for each diagnosis
 			$med_id = $_REQUEST['meds_id'];
 			if(!empty($med_id[$code]))
@@ -65,10 +89,19 @@
 					$dosage = $dosage[$code][$name][$lab];
 					$description = $_REQUEST['description'];
 					$description = $description[$code][$name][$lab];
-					$sql = "INSERT INTO prescription VALUES ('$name', '$lab', '$doctor', '$date', '$code', '$dosage', '$description')";
-					echo("<p>$sql</p>");
-					$nrows = $connection->exec($sql);
-					echo("<p>Prescriptions: $nrows</p>");
+
+					$result = $connection->prepare("INSERT INTO prescription VALUES (?, ?, ?,?, ?,?,?)");
+					$result->execute(array($name,$lab,$doctor,$date,$code,$dosage,$description));
+		
+					$error = $result->errorInfo();
+					if ($error[1] != ''){
+						echo("<p>Error: {$error[2]}</p>");
+					}
+					else
+					{
+						echo("<p>Prescription Created</p>");
+					}
+
 				}
 			}
 		}

@@ -27,10 +27,16 @@
     $a = $_REQUEST['SOAP_A'];
     $p = $_REQUEST['SOAP_P'];
 	
-	$sql = "UPDATE consultation SET SOAP_S = '$s', SOAP_O = '$o', SOAP_A = '$a', SOAP_P = '$p' WHERE VAT_doctor = '$doctor' and date_timestamp = '$date'";
-	echo("<p>$sql</p>");
-	$nrows = $connection->exec($sql);
-	echo("<p>Consultation updated: $nrows</p>");
+	$result = $connection->prepare("UPDATE consultation SET SOAP_S = ?, SOAP_O = ?, SOAP_A = ?, SOAP_P = ? WHERE VAT_doctor = ? and date_timestamp = ?");
+	$result->execute(array($s,$o,$a,$p,$doctor,$date));
+
+	$error = $result->errorInfo();
+	if ($error[1] != ''){
+		echo("<p>Error: {$error[2]}</p>");
+	}
+	else{
+		echo("<p>Consultation updated</p>");
+	}
 
 	//nurses
 	if(!empty($_REQUEST['nurses_preassigned']))
@@ -46,10 +52,15 @@
 		}
 		foreach($deletions as $deletion)
 		{
-			$sql = "DELETE FROM consultation_assistant WHERE VAT_doctor = '$doctor' and date_timestamp = '$date' and VAT_nurse = '$deletion'";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>Assistants Removed: $nrows</p>");
+			$result = $connection->prepare("DELETE FROM consultation_assistant WHERE VAT_doctor = ? and date_timestamp = ? and VAT_nurse = ?");
+			$result->execute(array($doctor,$date,$deletion));
+			$error = $result->errorInfo();
+			if ($error[1] != ''){
+				echo("<p>Error: {$error[2]}</p>");
+			}
+			else{
+				echo("<p>Assistants Removed</p>");
+			}
 		}
 	}
 	if(!empty($_REQUEST['nurse_list']))
@@ -57,10 +68,15 @@
 		//nurses added to consultation
 		foreach($_REQUEST['nurse_list'] as $nurse)
 		{
-			$sql = "INSERT INTO consultation_assistant VALUES ('$doctor', '$date', '$nurse')";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>New Nurses/Assistants Assigned: $nrows</p>");
+			$result = $connection->prepare("INSERT INTO consultation_assistant VALUES (?, ?, ?)");
+			$result->execute(array($doctor,$date,$nurse));
+			$error = $result->errorInfo();
+			if ($error[1] != ''){
+				echo("<p>Error: {$error[2]}</p>");
+			}
+			else{
+				echo("<p>New Nurses/Assistants Assigned</p>");
+			}
 		}
 	}
 	
@@ -69,10 +85,16 @@
 	{
 		foreach($_REQUEST['codes'] as $code)
 		{
-			$sql = "INSERT INTO consultation_diagnostic VALUES ('$doctor', '$date', '$code')";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>Diagnosis Created: $nrows</p>");
+			$result = $connection->prepare("INSERT INTO consultation_diagnostic VALUES (?, ?, ?)");
+			$result->execute(array($doctor,$date,$code));
+			$error = $result->errorInfo();
+			if ($error[1] != ''){
+				echo("<p>Error: {$error[2]}</p>");
+			}
+			else{
+				echo("<p>Diagnosis Created</p>");
+			}
+
 			//insert medication for each diagnosis
 			$med_id = $_REQUEST['meds_id'];
 			if(!empty($med_id[$code]))
@@ -86,10 +108,16 @@
 					$dosage = $dosage[$code][$name][$lab];
 					$description = $_REQUEST['description'];
 					$description = $description[$code][$name][$lab];
-					$sql = "INSERT INTO prescription VALUES ('$name', '$lab', '$doctor', '$date', '$code', '$dosage', '$description')";
-					echo("<p>$sql</p>");
-					$nrows = $connection->exec($sql);
-					echo("<p>Prescriptions added: $nrows</p>");
+					
+					$result = $connection->prepare("INSERT INTO prescription VALUES (?, ?, ?, ?, ?, ?, ?)");
+					$result->execute(array($name,$lab,$doctor,$date,$code,$dosage,$description));
+					$error = $result->errorInfo();
+					if ($error[1] != ''){
+						echo("<p>Error: {$error[2]}</p>");
+					}
+					else{
+						echo("<p>Prescriptions added</p>");
+					}
 				}
 			}
 		}
@@ -107,15 +135,26 @@
 		foreach($deletions as $code)
 		{
 			//delete all prescriptions for this consultation_diagnostic
-			$sql = "DELETE FROM prescription WHERE VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$code'";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>Prescriptions Deleted: $nrows</p>");
+			$result = $connection->prepare("DELETE FROM prescription WHERE VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+			$result->execute(array($doctor,$date,$code));
+			$error = $result->errorInfo();
+			if ($error[1] != ''){
+				echo("<p>Error: {$error[2]}</p>");
+			}
+			else{
+				echo("<p>Prescriptions Deleted</p>");
+			}
+			
 			//delete consultation_diagnostic
-			$sql = "DELETE FROM consultation_diagnostic WHERE VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$code'";
-			echo("<p>$sql</p>");
-			$nrows = $connection->exec($sql);
-			echo("<p>Diagnosis Deleted: $nrows</p>");
+			$result = $connection->prepare("DELETE FROM consultation_diagnostic WHERE VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+			$result->execute(array($doctor,$date,$code));
+			$error = $result->errorInfo();
+			if ($error[1] != ''){
+				echo("<p>Error: {$error[2]}</p>");
+			}
+			else{
+				echo("<p>Diagnosis Deleted</p>");
+			}
 		}
 		//updates on preassigned diagnosis
 		$meds_assigned = $_REQUEST['meds_id_assigned'];
@@ -135,10 +174,16 @@
 						$dosage = $dosage[$code][$name][$lab];
 						$description = $_REQUEST['description'];
 						$description = $description[$code][$name][$lab];
-						$sql = "UPDATE prescription SET dosage = '$dosage', description = '$description' WHERE name = '$name' AND lab = '$lab' AND VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$code'";
-						echo("<p>$sql</p>");
-						$nrows = $connection->exec($sql);
-						echo("<p>Updates Completed: $nrows</p>");
+
+						$result = $connection->prepare("UPDATE prescription SET dosage = ?, description = ? WHERE name = ? AND lab = ? AND VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+						$result->execute(array($dosage,$description,$name,$lab,$doctor,$date,$code));
+						$error = $result->errorInfo();
+						if ($error[1] != ''){
+							echo("<p>Error: {$error[2]}</p>");
+						}
+						else{
+							echo("<p>Updates Completed</p>");
+						}
 					}
 						$deletions = array_diff($meds_preassigned[$code],$meds_assigned[$code]);}
 				else{
@@ -149,10 +194,17 @@
 					$med = unserialize($deletion);
 					$name = $med['name'];
 					$lab = $med['lab'];
-					$sql = "DELETE FROM prescription WHERE name = '$name' AND lab = '$lab' AND VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$code'";
-					echo("<p>$sql</p>");
-					$nrows = $connection->exec($sql);
-					echo("<p>Prescriptions Deleted: $nrows</p>");
+
+					
+					$result = $connection->prepare("DELETE FROM prescription WHERE name = ? AND lab = ? AND VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+					$result->execute(array($name,$lab,$doctor,$date,$code));
+					$error = $result->errorInfo();
+					if ($error[1] != ''){
+						echo("<p>Error: {$error[2]}</p>");
+					}
+					else{
+						echo("<p>Prescriptions Deleted</p>");
+					}
 				}
 			}
 			//insertions of meds for this diagnostic
@@ -168,10 +220,16 @@
 					$dosage = $dosage[$code][$name][$lab];
 					$description = $_REQUEST['description'];
 					$description = $description[$code][$name][$lab];
-					$sql = "INSERT INTO prescription VALUES ('$name', '$lab', '$doctor', '$date', '$code', '$dosage', '$description')";
-					echo("<p>$sql</p>");
-					$nrows = $connection->exec($sql);
-					echo("<p>Prescriptions added: $nrows</p>");
+
+					$result = $connection->prepare("INSERT INTO prescription VALUES (?, ?, ?, ?, ?,?,?)");
+					$result->execute(array($name,$lab,$doctor,$date,$code,$dosage,$description));
+					$error = $result->errorInfo();
+					if ($error[1] != ''){
+						echo("<p>Error: {$error[2]}</p>");
+					}
+					else{
+						echo("<p>Prescriptions added</p>");
+					}
 				}
 			}
 		}

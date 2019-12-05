@@ -22,36 +22,55 @@
     }
 	
     $date = $_REQUEST['date'];
-    $doctor = $_REQUEST['doctor'];
+	$doctor = $_REQUEST['doctor'];
 	
-	$sql = "SELECT * FROM consultation WHERE VAT_doctor = '$doctor' and date_timestamp = '$date'";
-	$result = $connection->query($sql);
+	$result = $connection->prepare("SELECT * FROM consultation WHERE VAT_doctor = ? and date_timestamp = ?");
+	$result->execute(array($doctor, $date));
+	$error = $result->errorInfo();
+	if ($error[1] != ''){
+		echo("<p>Error: {$error[2]}</p>");
+	}
+
 	$nrows = $result->rowCount();
 	
 	// Get nurses already assigned to this consultation
-	$sql2 = "SELECT employee.name AS name, employee.VAT AS VAT FROM consultation_assistant AS ca, employee WHERE ca.VAT_doctor = '$doctor' and ca.date_timestamp = '$date' and ca.VAT_nurse = employee.VAT";
-	$result2 = $connection->query($sql2);
-	if ($result2 == FALSE)
-	{
-		$info = $connection->errorInfo();
-		echo("<p>Error: {$info[2]}</p>");
-		exit();
+	$result2 = $connection->prepare("SELECT employee.name AS name, employee.VAT AS VAT FROM consultation_assistant AS ca, employee WHERE ca.VAT_doctor = ? and ca.date_timestamp = ? and ca.VAT_nurse = employee.VAT");
+	$result2->execute(array($doctor, $date));
+
+	$error2 = $result2->errorInfo();
+	if ($error2[1] != ''){
+		echo("<p>Error: {$error2[2]}</p>");
 	}
 	$nrows2 = $result2->rowCount();
 	
 	// Get nurses available for the desired timestamp
-	$sql3 = "SELECT employee.name AS name, employee.VAT AS VAT FROM nurse, employee WHERE nurse.VAT NOT IN (SELECT VAT_nurse FROM consultation_assistant WHERE date_timestamp = '$date') AND nurse.VAT = employee.VAT";
-	$result3 = $connection->query($sql3);
+	$result3 = $connection->prepare("SELECT employee.name AS name, employee.VAT AS VAT FROM nurse, employee WHERE nurse.VAT NOT IN (SELECT VAT_nurse FROM consultation_assistant WHERE date_timestamp = ?) AND nurse.VAT = employee.VAT");
+	$result3->execute(array($date));
+
+	$error3 = $result3->errorInfo();
+	if ($error3[1] != ''){
+		echo("<p>Error: {$error3[2]}</p>");
+	}
 	$nrows3 = $result3->rowCount();
 	
 	//Get diagnostic codes already assigned to this consultation
-	$sql6 = "SELECT ID FROM consultation_diagnostic WHERE VAT_doctor = '$doctor' and date_timestamp = '$date'";
-	$result_consult_diagnostic = $connection->query($sql6);
+	$result_consult_diagnostic = $connection->prepare("SELECT ID FROM consultation_diagnostic WHERE VAT_doctor = ? and date_timestamp = ?");
+	$result_consult_diagnostic->execute(array($doctor,$date));
+
+	$error4 = $result_consult_diagnostic->errorInfo();
+	if ($error4[1] != ''){
+		echo("<p>Error: {$error4[2]}</p>");
+	}
+
 	$nrows_consult_diagnostic = $result_consult_diagnostic->rowCount();
 	
 	// Get diagnostic codes
-	$sql4 = "SELECT ID FROM diagnostic_code WHERE ID NOT IN ($sql6)";
-	$result_diagcodes = $connection->query($sql4);
+	$result_diagcodes = $connection->prepare("SELECT ID FROM diagnostic_code WHERE ID NOT IN (SELECT ID FROM consultation_diagnostic WHERE VAT_doctor = ? and date_timestamp = ?)");
+	$result_diagcodes->execute(array($doctor,$date));
+	$error5 = $result_diagcodes->errorInfo();
+	if ($error5[1] != ''){
+		echo("<p>Error: {$error5[2]}</p>");
+	}
 	$nrows_diagcodes = $result_diagcodes->rowCount();
 
 	// Get medication
@@ -80,7 +99,7 @@
 		// if there are nurses available
 		if ($nrows3 != 0)
 		{
-			foreach($result3 as $row3)
+			foreach($result3->fetchAll(PDO::FETCH_ASSOC) as $row3)
 			{
 				echo("<tr><td>Assistant Nurses: </td> <td><input type='checkbox' name='nurse_list[]' value='{$row3['VAT']}'><label>{$row3['name']} {$row3['VAT']}</label></td></tr>");
 			}
@@ -89,7 +108,7 @@
 		{
 			echo("<tr><td>ATTENTION: </td><td>No nurse/assistant available for this consultation</td></tr>");
 		}
-		foreach($result_diagcodes as $diagnostic)
+		foreach($result_diagcodes->fetchAll(PDO::FETCH_ASSOC) as $diagnostic)
 		{
 			// check list of diagnostic codes
 			$id = $diagnostic['ID'];
@@ -118,7 +137,7 @@
 	}
 	else
 	{
-		foreach($result as $row)
+		foreach($result->fetchAll(PDO::FETCH_ASSOC) as $row)
 		{
 			echo("<form action='updateConsultation.php' method='post'>");
 				echo("<input type='hidden' name='doctor' value='{$doctor}'>");
@@ -130,7 +149,7 @@
 				//Nurses already assigned to this consultation
 				if ($nrows2 != 0)
 				{
-					foreach($result2 as $row2)
+					foreach($result2->fetchAll(PDO::FETCH_ASSOC) as $row2)
 					{
 						echo("<input type='hidden' name='nurses_preassigned[]' value='{$row2['VAT']}'>");
 						echo("<tr><td>Assistant Nurses: </td> <td><input type='checkbox' name='nurses_assigned[]' value='{$row2['VAT']}' checked><label>{$row2['name']} {$row2['VAT']}</label></td></tr>");
@@ -138,7 +157,7 @@
 				}
 				if ($nrows3 != 0)
 				{
-					foreach($result3 as $row3)
+					foreach($result3->fetchAll(PDO::FETCH_ASSOC) as $row3)
 					{
 						echo("<tr><td>Assistant Nurses: </td> <td><input type='checkbox' name='nurse_list[]' value='{$row3['VAT']}'><label>{$row3['name']} {$row3['VAT']}</label></td></tr>");
 					}
@@ -150,7 +169,7 @@
 				// already created diagnosis
 				if($nrows_consult_diagnostic != 0)
 				{
-					foreach($result_consult_diagnostic as $diagnostic)
+					foreach($result_consult_diagnostic->fetchAll(PDO::FETCH_ASSOC) as $diagnostic)
 					{
 						// check list of diagnostic codes
 						$id = $diagnostic['ID'];
@@ -158,12 +177,17 @@
 						echo("<tr><td>Diagnostic Code: </td> <td><input type='checkbox' name='assigned_codes[]' value='{$diagnostic['ID']}' checked><label>{$diagnostic['ID']}</label></td>");
 						echo("<td>Associated Prescriptions: </td></tr>");
 						// find medication already prescribed
-						$sql = "SELECT * FROM prescription WHERE VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$id'";
-						$result_medication2 = $connection->query($sql);
+						$result_medication2 = $connection->prepare("SELECT * FROM prescription WHERE VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+						$result_medication2->execute(array($doctor,$date,$id));
+						$error6 = $result_medication2->errorInfo();
+						if ($error6[1] != ''){
+							echo("<p>Error: {$error6[2]}</p>");
+						}
+
 						$nrows_medication2 = $result_medication2->rowCount();
 						if($nrows_medication2 != 0)
 						{
-							foreach($result_medication2 as $med)
+							foreach($result_medication2->fetchAll(PDO::FETCH_ASSOC) as $med)
 							{
 								$med_name = $med['name'];
 								$med_lab = $med['lab'];
@@ -176,12 +200,17 @@
 							}
 						}
 						// find medication not prescribed
-						$sql = "SELECT * FROM medication WHERE (name,lab) NOT IN (SELECT name, lab FROM prescription WHERE VAT_doctor = '$doctor' AND date_timestamp = '$date' AND ID = '$id')";
-						$result_medication2 = $connection->query($sql);
+						$result_medication2 = $connection->prepare("SELECT * FROM medication WHERE (name,lab) NOT IN (SELECT name, lab FROM prescription WHERE VAT_doctor = ? AND date_timestamp = ? AND ID = ?");
+						$result_medication2->execute(array($doctor,$date,$id));
+						$error7 = $result_medication2->errorInfo();
+						if ($error7[1] != ''){
+							echo("<p>Error: {$error7[2]}</p>");
+						}
+
 						$nrows_medication2 = $result_medication2->rowCount();
 						if($nrows_medication2 != 0)
 						{
-							foreach($result_medication2 as $med)
+							foreach($result_medication2->fetchAll(PDO::FETCH_ASSOC) as $med)
 							{
 								$med_name = $med['name'];
 								$med_lab = $med['lab'];
@@ -195,7 +224,7 @@
 					}
 				}
 				// not yet created diagnosis
-				foreach($result_diagcodes as $diagnostic)
+				foreach($result_diagcodes->fetchAll(PDO::FETCH_ASSOC) as $diagnostic)
 				{
 					// check list of diagnostic codes
 					$id = $diagnostic['ID'];

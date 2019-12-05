@@ -71,34 +71,41 @@
     $measure = $_REQUEST['measure'];
     $desc = 'default';
   
-    $sql = "insert into procedure_in_consultation values('$name','$doctor','$date','$desc ')";
-    $connection->exec($sql);
 
+    $result = $connection->prepare("insert into procedure_in_consultation values(?,?,?,?)");
+    $result->execute(array($name,$doctor,$date,$desc));
+    $error = $result->errorInfo();
+    if ($error[1] == ''){
+        echo("<p>procedure in consultation added</p>");
+    }
 
-    $connection->beginTransaction();
-    
-    for($i=1;$i<=2;$i++){
-        for($j=1;$j<=3;$j++){
-            if(!empty($measure[$i][$j])){
-                $sql = "insert into procedure_charting values ('$name', '$doctor', '$date','$i','$j','{$description[$i][$j]}','{$measure[$i][$j]}')";
-                $result = $connection->exec($sql); 
+    try{
+        $connection->beginTransaction();
+        
+        for($i=1;$i<=2;$i++){
+            for($j=1;$j<=3;$j++){
+                if(!empty($measure[$i][$j])){
 
-                if ($result == FALSE){
-                    $info = $connection->errorInfo();
-                    echo("<p>Error: {$info[2]}</p>");
+                    $result = $connection->prepare("insert into procedure_charting values (?, ?, ?,?,?,?,?)");
+                    $result->execute(array($name, $doctor, $date,$i,$j,$description[$i][$j],$measure[$i][$j]));
+                    $error = $result->errorInfo();
+                    if ($error[1] != ''){
+                        echo("<p>Error: {$error[2]}</p>");
+                    }
+                    else{
+                        echo("<p>New measure added</p>");
+                    }
                 }
-                else
-                {
-                    echo("<p>$sql</p>");
-                    echo("<p>New measure</p>");
-                }
-
-
             }
-        }
-    } 
+        } 
 
-    $connection->commit();
+        $connection->commit();
+    } catch(Exception $e) {
+        $connection->rollback();
+        throw $e;
+      }
+
+    
     $connection = null;
  
     ?>

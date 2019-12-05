@@ -21,10 +21,11 @@
     exit();
     }
 
-    $VAT = $_REQUEST['VAT'];
+	$VAT = $_REQUEST['VAT'];
 	
-	$sql = "SELECT * FROM appointment NATURAL LEFT OUTER JOIN consultation where VAT_client = '$VAT' order by date_timestamp";
-	$result = $connection->query($sql);
+	$result = $connection->prepare("SELECT * FROM appointment NATURAL LEFT OUTER JOIN consultation where VAT_client = ? order by date_timestamp");
+    $result->execute(array($VAT));
+
 	$nrows = $result->rowCount();
 	if ($nrows == 0)
 	{
@@ -34,7 +35,7 @@
 	{   
 		echo("<table>");
 		echo("<tr> <th>TYPE</th> <th>DATE</th> <th>DOCTOR</th> </tr>");
-		foreach($result as $row)
+		foreach($result->fetchAll(PDO::FETCH_ASSOC) as $row)
 		{
 			$date = $row['date_timestamp'];
 			$doctor = $row['VAT_doctor'];

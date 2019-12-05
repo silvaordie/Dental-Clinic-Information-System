@@ -33,9 +33,11 @@
     echo("<p>SOAP_A: {$_REQUEST['soap_a']}");
     echo("<p>SOAP_P: {$_REQUEST['soap_p']}");
 
+    
+    $result = $connection->prepare("select * from consultation_diagnostic where VAT_doctor = ? and date_timestamp = ? ");
+    $result->execute(array($doctor, $date));
 
-    $sql = "select * from consultation_diagnostic where VAT_doctor = '$doctor' and date_timestamp = '$date' ";
-    $result = $connection->query($sql);
+    
     $nrows = $result->rowCount();
     if ($nrows == 0)
     {
@@ -43,13 +45,15 @@
     }
     else 
     {
-        foreach($result as $row)
+        foreach($result->fetchAll(PDO::FETCH_ASSOC) as $row)
         {
             echo("<table>");
             echo("<tr><td>Diagnosis ID : {$row['ID']}</td></tr>");
-            $sql2 = "select * from prescription as p where p.VAT_doctor='$doctor' and p.date_timestamp = '$date' group by p.name";
-            $result2 = $connection->query($sql2);
-            $nrows2 = $result2->rowCount();
+
+
+            $result2 = $connection->prepare("select * from prescription as p where p.VAT_doctor=? and p.date_timestamp = ? group by p.name");
+            $result2->execute(array($doctor, $date));
+            $nrows2 = $result->rowCount();
             if($nrows2 == 0)
             {
                 echo("<tr><td></td>");
@@ -59,7 +63,7 @@
             }
             else
             {
-                foreach($result2 as $presc)
+                foreach($result2->fetchAll(PDO::FETCH_ASSOC) as $presc)
                 {
                     echo("<tr><td></td>");
                     echo("<td>name, lab: {$presc['name']}, {$presc['lab']} </td>");
