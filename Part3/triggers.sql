@@ -242,20 +242,16 @@ begin
 	update employee
 	set salary = salary + salary*0.05
 	where VAT in (select VAT
-	from doctor
-	where VAT in (select VAT
 	from permanent_doctor
 	where years > x_years)
 	and VAT not in (select VAT_doctor
 	from consultation
 	where extract(year from date_timestamp) = year(curdate())
 	group by VAT_doctor
-	having count(*) > 100));
+	having count(*) > 100);
 	
 	update employee
 	set salary = salary + salary*0.1
-	where VAT in (select VAT
-	from doctor
 	where VAT in (select VAT
 	from permanent_doctor
 	where years > x_years)
@@ -263,6 +259,6 @@ begin
 	from consultation
 	where extract(year from date_timestamp) = year(curdate())
 	group by VAT_doctor
-	having count(*) > 100));
+	having count(*) > 100);
 end$$
 delimiter ;
